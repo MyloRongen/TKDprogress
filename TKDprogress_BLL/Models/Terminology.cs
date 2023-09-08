@@ -13,6 +13,7 @@ namespace TKDprogress_BLL.Models
         public string Word { get; set; }
         public string Meaning { get; set; }
 
-        public EnumStatus Status { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

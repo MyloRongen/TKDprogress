@@ -21,11 +21,11 @@ namespace TKDprogress_DAL.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT Id, Word, Meaning FROM Terminologies";
+                string query = "SELECT t.*, ca.* FROM Terminologies t INNER JOIN Categories ca ON t.CategoryId = ca.Id";
 
                 if (!string.IsNullOrEmpty(searchString))
                 {
-                    query += $" WHERE Name LIKE '%{searchString}%'";
+                    query += $" WHERE Word LIKE '%{searchString}%'";
                 }
 
                 using MySqlCommand command = new(query, connection);
@@ -37,6 +37,13 @@ namespace TKDprogress_DAL.Repositories
                         Id = reader.GetInt32("Id"),
                         Word = reader.GetString("Word"),
                         Meaning = reader.GetString("Meaning"),
+                        CategoryId = reader.GetInt32("CategoryId"),
+                        Category = new CategoryDto
+                        {
+                            Id = reader.GetInt32("CategoryId"),
+                            Name = reader.GetString("Name"),
+                            Description = reader.GetString("Description")
+                        }
                     };
 
                     terminologies.Add(terminology);
@@ -54,7 +61,7 @@ namespace TKDprogress_DAL.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT Id, Word, Meaning FROM Terminologies WHERE Id = @Id";
+                string query = "SELECT t.*, ca.* FROM Terminologies t INNER JOIN Categories ca ON t.CategoryId = ca.Id WHERE t.Id = @Id";
 
                 using MySqlCommand command = new(query, connection);
                 command.Parameters.AddWithValue("@Id", id);
@@ -67,6 +74,13 @@ namespace TKDprogress_DAL.Repositories
                         Id = reader.GetInt32("Id"),
                         Word = reader.GetString("Word"),
                         Meaning = reader.GetString("Meaning"),
+                        CategoryId = reader.GetInt32("CategoryId"),
+                        Category = new CategoryDto
+                        {
+                            Id = reader.GetInt32("CategoryId"),
+                            Name = reader.GetString("Name"),
+                            Description = reader.GetString("Description")
+                        }
                     };
                 }
             }
@@ -77,11 +91,12 @@ namespace TKDprogress_DAL.Repositories
 
         public async Task<TerminologyDto> CreateTerminologyAsync(TerminologyDto terminology)
         {
-            string query = "INSERT INTO Terminologies (Word, Meaning) VALUES (@Word, @Meaning)";
+            string query = "INSERT INTO Terminologies (Word, Meaning, CategoryId) VALUES (@Word, @Meaning, @CategoryId)";
             await ExecuteNonQueryAsync(query, command =>
             {
                 command.Parameters.AddWithValue("@Word", terminology.Word);
                 command.Parameters.AddWithValue("@Meaning", terminology.Meaning);
+                command.Parameters.AddWithValue("@CategoryId", terminology.CategoryId);
             });
 
             return terminology;
@@ -97,12 +112,13 @@ namespace TKDprogress_DAL.Repositories
 
         public async Task<TerminologyDto> UpdateTerminologyAsync(TerminologyDto newTerminology)
         {
-            string query = "UPDATE Terminologies SET Word = @Word, Meaning = @Meaning WHERE Id = @Id";
+            string query = "UPDATE Terminologies SET Word = @Word, Meaning = @Meaning, CategoryId = @CategoryId WHERE Id = @Id";
             await ExecuteNonQueryAsync(query, command =>
             {
                 command.Parameters.AddWithValue("@Id", newTerminology.Id);
                 command.Parameters.AddWithValue("@Word", newTerminology.Word);
                 command.Parameters.AddWithValue("@Meaning", newTerminology.Meaning);
+                command.Parameters.AddWithValue("@CategoryId", newTerminology.CategoryId);
             });
 
             return newTerminology;

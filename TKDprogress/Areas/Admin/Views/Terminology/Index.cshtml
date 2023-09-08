@@ -1,0 +1,97 @@
+﻿@model IEnumerable<TerminologyViewModel>
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="h-screen">
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    else
+    {
+        <div class="shadow-lg">
+            <div class="flex flex-col justify-center pl-20">
+                <h1 class="text-3xl py-6 font-medium">Terminologies</h1>
+            </div>
+        </div>
+
+        <div class="px-2 md:px-20 pt-10">
+            
+            <div class="flex justify-between">
+                @using (Html.BeginForm("Index", "Terminology", FormMethod.Get))
+                {
+                    <p>
+                        <div class="relative hidden xl:block">
+                            <input type="text" id="searchString" name="searchString" placeholder="Zoeken" class="w-96 pl-2 py-2 bg-gray-50 border border-gray-500 rounded-md focus:border-blue-500 focus:ring-blue-500">
+                            <button type="submit" value="Search" class="absolute right-0 top-0 mt-3 mr-4">
+                                <svg class="h-4 w-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </p>
+                }
+
+                <div>
+                    <a asp-action="Create" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Create New</a>
+                </div>
+            </div>
+            
+
+            <div class="overflow-x-auto pt-10">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                @Html.DisplayNameFor(model => model.Word)
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                @Html.DisplayNameFor(model => model.Meaning)
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Category
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach (TerminologyViewModel terminology in Model)
+                        {
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @Html.DisplayFor(modelItem => terminology.Id)
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @Html.DisplayFor(modelItem => terminology.Word)
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @Html.DisplayFor(modelItem => terminology.Meaning)
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @Html.DisplayFor(modelItem => terminology.Category.Name)
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center space-x-2">
+                                        <a href="@Url.Action("Edit", new { id = terminology.Id })" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                        <a href="@Url.Action("Details", new { id = terminology.Id })" class="text-indigo-600 hover:text-indigo-900">Details</a>
+                                        <a href="@Url.Action("Delete", new { id = terminology.Id })" class="text-red-600 hover:text-red-900">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>     
+    }   
+</div>
