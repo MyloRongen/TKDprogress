@@ -1,0 +1,13 @@
+﻿@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Access denied";
+    Layout = "~/Areas/Identity/Pages/Account/_Layout.cshtml";
+}
+
+<div class="flex items-center justify-center h-screen">
+    <div class="p-10 shadow-xl rounded-md">
+        <h1 class="text-center text-red-500 font-bold text-5xl">@ViewData["Title"]!!!</h1>
+        <p class="text-danger text-3xl text-gray-900 pt-5">You do not have access to this resource.</p>
+    </div>
+</div>

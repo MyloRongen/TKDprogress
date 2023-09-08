@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <ul class="">
+    <li>
+        <div>
+            <button type="button" class="mt-1 flex text-sm bg-white rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-10 h-10 rounded-full" src="https://d2v9ipibika81v.cloudfront.net/uploads/sites/210/Profile-Icon.png" alt="user photo">
+            </button>
+
+            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow" id="user-dropdown">
+                <div class="px-4 py-3">
+                    <span class="block text-sm">@User.Identity?.Name!</span>
+                </div>
+                <ul class="py-2" aria-labelledby="user-menu-button">
+                    <li>
+                        <a class="block px-4 text-white text-sm hover:bg-gray-100" asp-area="Identity" asp-page="/Account/Manage/Index" id="navbarDarkDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                    <li>
+                        <a class="block px-4 py-2 text-sm" asp-area="" asp-controller="Admin" asp-action="Index">Administration</a>
+                    </li>
+                    }
+                    <li>
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="block px-4 py-2 text-sm">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </li>
+    </ul>
+}
+else
+{
+    <div class="container mx-auto pt-2">
+        <a class="text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </div>
+}
