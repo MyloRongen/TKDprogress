@@ -7,16 +7,19 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_SL.Enums;
 
 namespace TKDprogress_DAL.Entities
 {
     [Keyless]
     public class UserCategory
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public IdentityUser User { get; set; }
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public EnumStatus Status { get; set; }
     }
 }

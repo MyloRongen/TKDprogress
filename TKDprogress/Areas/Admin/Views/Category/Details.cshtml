@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Admin/_Layout.cshtml";
+    Layout = "../Shared/_Layout.cshtml";
 }
 
 <div class="px-12 pt-10 h-screen">
@@ -16,11 +16,11 @@
             <dd class="text-sm">
                 @Html.DisplayFor(model => model.Id)
             </dd>
-            <dt class="text-sm font-medium text-gray-500">Title</dt>
+            <dt class="text-sm font-medium text-gray-500">Name</dt>
             <dd class="text-sm">
                 @Html.DisplayFor(model => model.Name)
             </dd>
-            <dt class="text-sm font-medium text-gray-500">ReleaseDate</dt>
+            <dt class="text-sm font-medium text-gray-500">Description</dt>
             <dd class="text-sm">
                 @Html.DisplayFor(model => model.Description)
             </dd>

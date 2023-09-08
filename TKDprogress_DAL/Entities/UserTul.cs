@@ -13,7 +13,7 @@ namespace TKDprogress_DAL.Entities
     [Keyless]
     public class UserTul
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public IdentityUser User { get; set; }
 
         public int TulId { get; set; }
