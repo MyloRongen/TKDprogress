@@ -25,9 +25,9 @@
                     </li>
                     @if (User.IsInRole("Admin"))
                     {
-                    <li>
-                        <a class="block px-4 py-2 text-sm" asp-area="" asp-controller="Admin" asp-action="Index">Administration</a>
-                    </li>
+                        <li>
+                            <a class="block px-4 py-2 text-sm" asp-area="" asp-controller="Admin" asp-action="Index">Administration</a>
+                        </li>
                     }
                     <li>
                         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
