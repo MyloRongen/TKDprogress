@@ -1,4 +1,5 @@
-﻿using TKDprogress_SL.Enums;
+﻿using TKDprogress_SL.Entities;
+using TKDprogress_SL.Enums;
 
 namespace TKDprogress.Models
 {
@@ -8,6 +9,8 @@ namespace TKDprogress.Models
         public string Word { get; set; }
         public string Meaning { get; set; }
 
-        public EnumStatus Status { get; set; }
+        public int CategoryId { get; set; }
+        public CategoryViewModel Category { get; set; }
+        public List<CategoryViewModel> Categories { get; set; }
     }
 }

@@ -1,0 +1,73 @@
+﻿@model UpdateTerminologyViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="h-screen">
+    <div class="shadow-lg">
+        <div class="flex flex-col justify-center pl-4 md:pl-20">
+            <h1 class="text-3xl py-6 font-medium">Update terminology</h1>
+        </div>
+    </div>
+    <div class="pt-10 pl-0 md:pl-20">
+        <div class="absolute ml-4">
+            <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Terug</a>
+        </div>
+
+        <section class="bg-white pt-16 xl:pt-0">
+            <div class="px-4 mx-auto max-w-2xl">
+                <form asp-action="Edit" asp-route-id="Id">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="text-danger">
+                        @* Validation summary goes here *@
+                    </div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="mb-4 w-full">
+                        <label asp-for="Word" class="block mb-2 text-lg font-medium text-gray-900">Word</label>
+                        <input type="text" asp-for="Word" name="Word" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                        <span asp-validation-for="Word" class="text-red-700"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Meaning" class="block mb-2 text-lg font-medium text-gray-900">Meaning</label>
+                        <input type="text" asp-for="Meaning" name="Meaning" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></input>
+                        <span asp-validation-for="Meaning" class="text-red-700"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="CategoryId" class="block mb-2 text-lg font-medium text-gray-900">Select category:</label>
+                        <select id="CategoryId" name="CategoryId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option>-- Select Category --</option>
+                            @foreach (var category in Model.Categories)
+                            {
+                                @if (category.Id == Model.CategoryId)
+                                {
+                                    <option value="@category.Id" selected>@category.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-red-700"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="Categories" />
+
+                    <div class="w-full flex justify-end">
+                        <input type="submit" value="Save" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+</div>

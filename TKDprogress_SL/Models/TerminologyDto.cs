@@ -13,6 +13,7 @@ namespace TKDprogress_SL.Entities
         public string Word { get; set; }
         public string Meaning { get; set; }
 
-        public EnumStatus Status { get; set; }
+        public int CategoryId { get; set; }
+        public CategoryDto Category { get; set; }
     }
 }
