@@ -7,7 +7,7 @@ using TKDprogress_BLL.Services;
 using TKDprogress_DAL.Repositories;
 using TKDprogress_SL.Entities;
 
-namespace TKDprogress.Controllers
+namespace TKDprogress.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
     [Area("Admin")]
