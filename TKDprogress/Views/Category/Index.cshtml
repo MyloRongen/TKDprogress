@@ -6,61 +6,67 @@
 }
 
 <div class="h-screen">
-    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-    {
-        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full">
-            @ViewBag.ErrorMessage
-        </div>
-    }
-    else
-    {
-        <div class="shadow-lg">
-            <div class="flex flex-col justify-center pl-20">
-                <h1 class="text-3xl py-6 font-medium">Categories</h1>
+    <div class="px-2 md:px-20 pt-10">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full">
+                @TempData["ErrorMessage"]
             </div>
+        }
+
+        <div>
+            @using (Html.BeginForm("Index", "Category", FormMethod.Get))
+            {
+                <p>
+                    <div class="relative hidden xl:block">
+                        <input type="text" id="searchString" name="searchString" placeholder="Zoeken" class="w-full pl-2 py-3 bg-gray-50 border border-gray-500 rounded-md focus:border-blue-500 focus:ring-blue-500">
+                        <button type="submit" value="Search" class="absolute right-0 top-0 mt-3 mr-4">
+                            <svg class="h-6 w-6 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </p>
+            }
         </div>
 
-        <div class="px-2 md:px-20 pt-10">
-            
-            <div>
-                @using (Html.BeginForm("Index", "Category", FormMethod.Get))
-                {
-                    <p>
-                        <div class="relative hidden xl:block">
-                            <input type="text" id="searchString" name="searchString" placeholder="Zoeken" class="w-full pl-2 py-3 bg-gray-50 border border-gray-500 rounded-md focus:border-blue-500 focus:ring-blue-500">
-                            <button type="submit" value="Search" class="absolute right-0 top-0 mt-3 mr-4">
-                                <svg class="h-6 w-6 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </p>
-                }
-            </div>
+        <div class="w-full pt-10 flex flex-col h-[88vh] overflow-y-auto transform scroll">
+            @foreach (UserCategoryViewModel category in Model)
+            {
+                <a asp-controller="Category" asp-action="Details" asp-route-categoryId="@category.Id">
+                    <div class="px-10 pb-6">
+                        <div class="w-full h-40 transition ease-in-out hover:scale-105 transform shadow hover:shadow-xl rounded-lg rounded-tr-xl">
+                            <div class="flex w-full bg-gradient-to-r from-[#00C2FF] to-black to-15% rounded-lg rounded-tr-xl">
+                                <div class="flex flex-1 h-40 flex-col justify-center">
+                                    <h1 class="text-white text-4xl pl-20">@Html.DisplayFor(modelItem => category.Name)</h1>
+                                </div>
+                                <div class="flex gap-20">
+                                    <h2 class="text-white text-4xl flex flex-1 h-40 flex-col justify-center">@Html.DisplayFor(modelItem => category.StatusText)</h2>
 
-            <div class="w-full pt-10 flex flex-col gap-6">
-                @foreach (UserCategoryViewModel category in Model)
-                {
-                    <div class="w-full h-40">
-                        <div class="flex w-full bg-gradient-to-r from-[#00C2FF] to-black to-15% rounded-lg rounded-tr-xl">
-                            <div class="flex flex-1 h-40 flex-col justify-center">
-                                <h1 class="text-white text-4xl pl-20">@Html.DisplayFor(modelItem => category.Name)</h1>
-                            </div>
-                            <div class="flex gap-20">
-                                <h2 class="text-white text-4xl flex flex-1 h-40 flex-col justify-center">@Html.DisplayFor(modelItem => category.StatusText)</h2>
-
-                                <div class="rounded-tr-lg rounded-bl-lg"
-                                     style="width: 50px; height: 50px;
+                                    <div class="rounded-tr-lg rounded-bl-lg"
+                                         style="width: 50px; height: 50px;
                                         @((int)category.Status == (int)EnumStatus.unlearned ? "background-color: red;" :
                                         (int)category.Status == (int)EnumStatus.inProgress ? "background-color: yellow;" :
                                         (int)category.Status == (int)EnumStatus.learned ? "background-color: green;" :
                                         "background-color: gray;")">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                }
-            </div>
-        </div>     
-    }   
+                </a>
+            }
+        </div>
+
+        <style>
+            .scroll::-webkit-scrollbar {
+                display: none;
+            }
+
+            .scroll {
+                -ms-overflow-style: none; 
+                scrollbar-width: none; 
+            }
+        </style>
+    </div>      
 </div>
