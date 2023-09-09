@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TKDprogress_SL.Entities
 {
-    public class Movement
+    public class MovementDto
     {
         public int Id { get; set; }
 
