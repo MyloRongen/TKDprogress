@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Models.UpdateModels
 {
@@ -13,5 +14,9 @@ namespace TKDprogress.Models.UpdateModels
         [Required(ErrorMessage = "Description is required.")]
         [MaxLength(255, ErrorMessage = "Description cannot exceed 255 characters.")]
         public string Description { get; set; }
+
+        public List<MovementDto>? Movements { get; set; }
+
+        public List<MovementDto>? MovementsChoices { get; set; }
     }
 }

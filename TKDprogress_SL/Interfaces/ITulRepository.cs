@@ -11,5 +11,7 @@ namespace TKDprogress_SL.Interfaces
     {
         Task<List<TulDto>> GetTulsAsync(string searchString);
         Task<TulDto> CreateTulAsync(TulDto newTul);
+        Task<TulDto> UpdateTulAsync(TulDto newTul);
+        Task<TulDto> DeleteTulAsync(TulDto tul);
     }
 }

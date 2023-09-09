@@ -10,5 +10,7 @@ namespace TKDprogress_BLL.Interfaces
     public interface ITulMovementService
     {
         Task AttachMovementsToTulAsync(TulDto tul, List<TulMovementDto> tulMovements);
+        Task<TulDto> GetTulWithMovementByIdAsync(int tulId);
+        Task DeleteTulMovementsAsync(int tulId);
     }
 }

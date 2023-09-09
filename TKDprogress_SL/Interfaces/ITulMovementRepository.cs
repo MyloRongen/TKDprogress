@@ -10,5 +10,7 @@ namespace TKDprogress_SL.Interfaces
     public interface ITulMovementRepository
     {
         Task AttachMovementsToTulAsync(List<TulMovementDto>? tulMovements);
+        Task<TulDto> GetTulWithMovementByIdAsync(int tulId);
+        Task DeleteTulMovementsAsync(int tulId);
     }
 }

@@ -71,5 +71,42 @@ namespace TKDprogress_DAL.Repositories
 
             return newTul;
         }
+
+        public async Task<TulDto> DeleteTulAsync(TulDto tul)
+        {
+            string query = "DELETE FROM Tuls WHERE Id = @Id";
+            await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", tul.Id));
+
+            return tul;
+        }
+
+        public async Task<TulDto> UpdateTulAsync(TulDto newTul)
+        {
+            string query = "UPDATE Tuls SET Name = @Name, Description = @Description WHERE Id = @Id";
+            await ExecuteNonQueryAsync(query, command =>
+            {
+                command.Parameters.AddWithValue("@Id", newTul.Id);
+                command.Parameters.AddWithValue("@Name", newTul.Name);
+                command.Parameters.AddWithValue("@Description", newTul.Description);
+            });
+
+            return newTul;
+        }
+
+        private async Task ExecuteNonQueryAsync(string query, Action<MySqlCommand> parameterAction)
+        {
+            using MySqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
+
+            using MySqlCommand command = new(query, connection);
+            parameterAction(command);
+
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+            if (rowsAffected <= 0)
+            {
+                throw new Exception("Operation failed.");
+            }
+        }
     }
 }

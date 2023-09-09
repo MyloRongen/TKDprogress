@@ -31,5 +31,19 @@ namespace TKDprogress_BLL.Services
 
             return tul;
         }
+
+        public async Task<TulDto> UpdateTulAsync(TulDto newTul)
+        {
+            TulDto tul = await _tulRepository.UpdateTulAsync(newTul);
+
+            return tul;
+        }
+
+        public async Task<TulDto> DeleteTulAsync(TulDto tul)
+        {
+            await _tulRepository.DeleteTulAsync(tul);
+
+            return tul;
+        }
     }
 }

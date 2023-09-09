@@ -31,5 +31,17 @@ namespace TKDprogress_BLL.Services
 
             await _tulMovementRepository.AttachMovementsToTulAsync(tulMovements);
         }
+
+        public async Task<TulDto> GetTulWithMovementByIdAsync(int tulId)
+        {
+            TulDto tul = await _tulMovementRepository.GetTulWithMovementByIdAsync(tulId);
+
+            return tul;
+        }
+
+        public async Task DeleteTulMovementsAsync(int tulId)
+        {
+            await _tulMovementRepository.DeleteTulMovementsAsync(tulId);
+        }
     }
 }
