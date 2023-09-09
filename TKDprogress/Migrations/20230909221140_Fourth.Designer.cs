@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TKDprogress_DAL.Data;
 
@@ -10,9 +11,11 @@ using TKDprogress_DAL.Data;
 namespace TKDprogress.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230909221140_Fourth")]
+    partial class Fourth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,6 +364,49 @@ namespace TKDprogress.Migrations
                     b.ToTable("UserTuls");
                 });
 
+            modelBuilder.Entity("TKDprogress_SL.Entities.MovementDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("TulDtoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TulDtoId");
+
+                    b.ToTable("MovementDto");
+                });
+
+            modelBuilder.Entity("TKDprogress_SL.Entities.TulDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TulDto");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -463,7 +509,7 @@ namespace TKDprogress.Migrations
 
             modelBuilder.Entity("TKDprogress_DAL.Entities.UserTul", b =>
                 {
-                    b.HasOne("TKDprogress_DAL.Entities.Tul", "Tul")
+                    b.HasOne("TKDprogress_SL.Entities.TulDto", "Tul")
                         .WithMany()
                         .HasForeignKey("TulId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -480,9 +526,21 @@ namespace TKDprogress.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TKDprogress_SL.Entities.MovementDto", b =>
+                {
+                    b.HasOne("TKDprogress_SL.Entities.TulDto", null)
+                        .WithMany("Movements")
+                        .HasForeignKey("TulDtoId");
+                });
+
             modelBuilder.Entity("TKDprogress_DAL.Entities.Category", b =>
                 {
                     b.Navigation("Terminologies");
+                });
+
+            modelBuilder.Entity("TKDprogress_SL.Entities.TulDto", b =>
+                {
+                    b.Navigation("Movements");
                 });
 #pragma warning restore 612, 618
         }
