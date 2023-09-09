@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using TKDprogress.Models;
+using TKDprogress.Models.CreateModels;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Services;
 using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Areas.Admin.Controllers
@@ -12,10 +16,14 @@ namespace TKDprogress.Areas.Admin.Controllers
     public class TulController : Controller
     {
         private readonly ITulService _tulService;
+        private readonly IMovementService _movementService;
+        private readonly ITulMovementService _tulMovementService;
 
-        public TulController(ITulService tulService)
+        public TulController(ITulService tulService, IMovementService movementService, ITulMovementService tulMovementService)
         {
             _tulService = tulService;
+            _movementService = movementService;
+            _tulMovementService = tulMovementService;
         }
 
         public async Task<ActionResult> Index(string searchString)
@@ -38,19 +46,49 @@ namespace TKDprogress.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: TulController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            List<MovementDto> movements = await _movementService.GetMovementsAsync("");
+
+            List<MovementDto> movementViewModels = movements.Select(movement => new MovementDto
+            {
+                Id = movement.Id,
+                Name = movement.Name,
+                ImageUrl = movement.ImageUrl,
+            }).ToList();
+
+            CreateTulViewModel tulViewModel = new()
+            {
+                Movements = movementViewModels
+            };
+
+            return View(tulViewModel);
         }
 
-        // POST: TulController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateTulViewModel tulViewModel, IFormCollection collection)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(tulViewModel);
+            }
+
+            TulDto newTul = new()
+            {
+                Name = tulViewModel.Name,
+                Description = tulViewModel.Description
+            };
+
+            TulDto tul = await _tulService.CreateTulAsync(newTul);
+
             try
             {
+                StringValues tulMovementsJson = collection["TulMovements"];
+                List<TulMovementDto>? tulMovements = JsonConvert.DeserializeObject<List<TulMovementDto>>(tulMovementsJson);
+
+                await _tulMovementService.AttachMovementsToTulAsync(tul, tulMovements);
+
                 return RedirectToAction(nameof(Index));
             }
             catch

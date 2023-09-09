@@ -45,5 +45,31 @@ namespace TKDprogress_DAL.Repositories
 
             return tuls;
         }
+
+        public async Task<TulDto> CreateTulAsync(TulDto newTul)
+        {
+            string insertQuery = "INSERT INTO Tuls (Name, Description) VALUES (@Name, @Description); SELECT LAST_INSERT_ID();";
+
+            int tulId = 0;
+
+            using MySqlConnection connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            using MySqlCommand command = new MySqlCommand(insertQuery, connection);
+            command.Parameters.AddWithValue("@Name", newTul.Name);
+            command.Parameters.AddWithValue("@Description", newTul.Description);
+
+            using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
+
+            if (reader.HasRows)
+            {
+                await reader.ReadAsync();
+                tulId = Convert.ToInt32(reader[0]);
+            }
+
+            newTul.Id = tulId;
+
+            return newTul;
+        }
     }
 }

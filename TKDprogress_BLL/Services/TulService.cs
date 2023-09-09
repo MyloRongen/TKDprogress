@@ -24,5 +24,12 @@ namespace TKDprogress_BLL.Services
 
             return tuls;
         }
+
+        public async Task<TulDto> CreateTulAsync(TulDto newTul)
+        {
+            TulDto tul =  await _tulRepository.CreateTulAsync(newTul);
+
+            return tul;
+        }
     }
 }

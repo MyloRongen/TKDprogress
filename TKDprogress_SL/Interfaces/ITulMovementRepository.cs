@@ -7,9 +7,8 @@ using TKDprogress_SL.Entities;
 
 namespace TKDprogress_SL.Interfaces
 {
-    public interface ITulRepository
+    public interface ITulMovementRepository
     {
-        Task<List<TulDto>> GetTulsAsync(string searchString);
-        Task<TulDto> CreateTulAsync(TulDto newTul);
+        Task AttachMovementsToTulAsync(List<TulMovementDto>? tulMovements);
     }
 }
