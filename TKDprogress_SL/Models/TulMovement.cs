@@ -16,7 +16,7 @@ namespace TKDprogress_SL.Entities
         public Tul Tul { get; set; }
 
         public int MovementId { get; set; }
-        public Movement Movement { get; set; }
+        public MovementDto Movement { get; set; }
 
         public int Order { get; set; }
     }
