@@ -25,5 +25,15 @@ namespace TKDprogress_BLL.Services
 
             return assignedCategories;
         }
+
+        public async Task<UserCategoryDto> GetUserCategory(int categoryId, string userId)
+        {
+            return await _userCategoryRepository.GetUserCategory(categoryId, userId);
+        }
+
+        public async Task<UserCategoryDto> UpdateUserCategoryStatus(UserCategoryDto userCategory)
+        {
+            return await _userCategoryRepository.UpdateUserCategoryStatus(userCategory);
+        }
     }
 }

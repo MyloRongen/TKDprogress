@@ -56,5 +56,63 @@ namespace TKDprogress_DAL.Repositories
 
             return userCategories;
         }
+
+        public async Task<UserCategoryDto> GetUserCategory(int categoryId, string userId)
+        {
+            UserCategoryDto? userCategory = null;
+
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string query = "SELECT uc.CategoryId, uc.Status FROM UserCategories uc WHERE uc.CategoryId = @CategoryId AND uc.UserId = @UserId";
+
+                using MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@CategoryId", categoryId);
+                command.Parameters.AddWithValue("@UserId", userId);
+
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    userCategory = new UserCategoryDto
+                    {
+                        UserId = userId,
+                        CategoryId = categoryId, 
+                        Status = (EnumStatus)reader.GetInt32("Status"), 
+                    };
+                }
+            }
+
+            return userCategory;
+        }
+
+        public async Task<UserCategoryDto> UpdateUserCategoryStatus(UserCategoryDto userCategory)
+        {
+            string query = "UPDATE UserCategories SET Status = @Status WHERE UserId = @UserId AND CategoryId = @CategoryId";
+            await ExecuteNonQueryAsync(query, command =>
+            {
+                command.Parameters.AddWithValue("@Status", (int)userCategory.Status);
+                command.Parameters.AddWithValue("@UserId", userCategory.UserId);
+                command.Parameters.AddWithValue("@CategoryId", userCategory.CategoryId);
+            });
+
+            return userCategory;
+        }
+
+        private async Task ExecuteNonQueryAsync(string query, Action<MySqlCommand> parameterAction)
+        {
+            using MySqlConnection connection = new(_connectionString);
+            await connection.OpenAsync();
+
+            using MySqlCommand command = new(query, connection);
+            parameterAction(command);
+
+            int rowsAffected = await command.ExecuteNonQueryAsync();
+
+            if (rowsAffected <= 0)
+            {
+                throw new Exception("Operation failed.");
+            }
+        }
     }
 }

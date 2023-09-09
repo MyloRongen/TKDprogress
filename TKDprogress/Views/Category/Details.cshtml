@@ -1,0 +1,53 @@
+﻿@model CategoryViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_SideLayout.cshtml";
+}
+
+<div class="h-screen">
+    <div class="px-2 md:px-20 pt-20">
+        <div class="flex justify-between">
+            <div class="flex flex-col justify-center">
+                <h1 class="text-3xl font-medium">@Html.DisplayFor(model => model.Name)</h1>
+            </div>
+
+            <div>
+                <form asp-action="UpdateUserCategoryStatus" method="post" enctype="multipart/form-data" class="flex gap-2">
+                    <input type="hidden" asp-for="Id" />
+                    <select id="categoryStatus" name="newStatus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5">
+                        @foreach (var status in Enum.GetValues(typeof(EnumStatus)))
+                        {
+                            @if ((int?)Model.Status == (int)status)
+                            {
+                                <option value="@status" selected>@status</option>
+                            }
+                            else
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        }
+                    </select>
+                    <input type="submit" value="Update Status" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+                </form>
+            </div>
+        </div>
+
+        <div class="pt-6">
+            @foreach (var terminology in Model.Terminologies)
+            {
+                <div class="w-full shadow p-6 gap-2 items-center hover:shadow-lg rounded-lg bg-black text-white text-xl">
+                    <div class="flex gap-2">
+                        <p class="font-bold"> Word: </p>
+                        <p class="text-[#00C2FF]"> @terminology.Word </p>
+                    </div>
+
+                    <div class="flex gap-2 pt-2">
+                        <p class="font-bold"> Meaning: </p>
+                        <p class="text-[#00C2FF]"> @terminology.Meaning </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

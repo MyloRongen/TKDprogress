@@ -40,6 +40,9 @@ namespace TKDprogress
             builder.Services.AddScoped<IUserCategoryService, UserCategoryService>();
             builder.Services.AddScoped<IUserCategoryRepository, UserCategoryRepository>();
 
+            builder.Services.AddScoped<ICategoryTerminologyService, CategoryTerminologyService>();
+            builder.Services.AddScoped<ICategoryTerminologyRepository, CategoryTerminologyRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
