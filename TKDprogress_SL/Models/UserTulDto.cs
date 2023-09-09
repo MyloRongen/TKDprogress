@@ -11,12 +11,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace TKDprogress_SL.Entities
 {
     [Keyless]
-    public class UserTul
+    public class UserTulDto
     {
         public int UserId { get; set; }
         public IdentityUser User { get; set; }
 
         public int TulId { get; set; }
-        public Tul Tul { get; set; }
+        public TulDto Tul { get; set; }
     }
 }

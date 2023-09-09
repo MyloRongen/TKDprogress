@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace TKDprogress_SL.Entities
 {
-    public class TulMovement
+    public class TulMovementDto
     {
         public int Id { get; set; }
 
         public int TulId { get; set; }
-        public Tul Tul { get; set; }
+        public TulDto Tul { get; set; }
 
         public int MovementId { get; set; }
         public MovementDto Movement { get; set; }
