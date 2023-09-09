@@ -13,10 +13,9 @@
             </div>
 
             <div>
-                <form asp-action="UpdateUserCategoryStatus" method="post" enctype="multipart/form-data">
+                <form asp-action="UpdateUserCategoryStatus" method="post" enctype="multipart/form-data" class="flex gap-2">
                     <input type="hidden" asp-for="Id" />
-                    <label for="categoryStatus">Select Status:</label>
-                    <select id="categoryStatus" name="newStatus">
+                    <select id="categoryStatus" name="newStatus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5">
                         @foreach (var status in Enum.GetValues(typeof(EnumStatus)))
                         {
                             @if ((int?)Model.Status == (int)status)
@@ -29,7 +28,7 @@
                             }
                         }
                     </select>
-                    <input type="submit" value="Update Status" />
+                    <input type="submit" value="Update Status" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
                 </form>
             </div>
         </div>
