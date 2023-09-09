@@ -52,6 +52,9 @@ namespace TKDprogress
             builder.Services.AddScoped<ITulMovementService, TulMovementService>();
             builder.Services.AddScoped<ITulMovementRepository, TulMovementRepository>();
 
+            builder.Services.AddScoped<IUserTulService, UserTulService>();
+            builder.Services.AddScoped<IUserTulRepository, UserTulRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

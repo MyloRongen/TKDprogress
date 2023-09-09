@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_SL.Entities;
+using TKDprogress_SL.Enums;
 
 namespace TKDprogress_DAL.Entities
 {
@@ -18,5 +20,7 @@ namespace TKDprogress_DAL.Entities
 
         public int TulId { get; set; }
         public Tul Tul { get; set; }
+
+        public EnumStatus Status { get; set; }
     }
 }
