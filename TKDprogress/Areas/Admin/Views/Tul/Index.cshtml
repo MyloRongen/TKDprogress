@@ -5,7 +5,7 @@
     Layout = "../Shared/_Layout.cshtml";
 }
 
-<div class="h-screen">
+<div class="h-screen overflow-y-auto transform scroll">
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
         <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full">
