@@ -43,16 +43,16 @@
                                 </div>
                                 <ul class="flex flex-col mt-4 bg-black p-6 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
                                     <li>
-                                        <a class="block py-2 pl-3 text-white pr-4 text-lg rounded md:bg-transparent md:p-0">Home</a>
+                                        <a href="/" class="block py-2 pl-3 text-white pr-4 text-lg rounded md:bg-transparent md:p-0">Home</a>
                                     </li>
                                     <li>
-                                        <a class="block py-2 pl-3 text-white pr-4 text-lg rounded md:p-0">Tuls</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="Tul" class="block py-2 pl-3 text-white pr-4 text-lg rounded md:p-0">Tuls</a>
                                     </li>
                                     <li>
-                                        <a class="block py-2 pl-3 text-white pr-4 text-lg rounded md:p-0">Terminologie</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="Terminology" class="block py-2 pl-3 text-white pr-4 text-lg rounded md:p-0">Terminology</a>
                                     </li>
                                     <li>
-                                        <a class="block py-2 pl-3 text-white pr-4 text-lg rounded md:p-0">About us</a>
+                                        <a asp-area="" asp-controller="Home" asp-action="AboutUs" class="block py-2 pl-3 text-white pr-4 text-lg rounded md:p-0">About us</a>
                                     </li>
 
                                     <li class="block md:hidden flex pt-5 text-[#1CADE4]">
@@ -63,15 +63,6 @@
 
                             <div class="hidden md:block">
                                 <div class="flex mt-4">
-                                    <div class="relative hidden xl:block">
-                                        <input type="text" placeholder="Zoeken" class="w-64 pl-2 py-2 bg-gray-50 border border-gray-500 rounded-md focus:border-[#E95783] focus:ring-[#E95783]">
-                                        <button class="absolute right-0 top-0 mt-3 mr-4">
-                                            <svg class="h-4 w-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-
                                     <div class="block xl:hidden">
                                         <button class="h-11">
                                             <svg class="h-7 w-7 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

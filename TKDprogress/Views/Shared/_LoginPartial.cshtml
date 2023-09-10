@@ -19,19 +19,24 @@
                 </div>
                 <ul class="py-2" aria-labelledby="user-menu-button">
                     <li>
-                        <a class="block px-4 text-white text-sm hover:bg-gray-100" asp-area="Identity" asp-page="/Account/Manage/Index" id="navbarDarkDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                        <a class="block px-4 py-2 text-sm hover:bg-gray-100" asp-area="" asp-controller="Tul" asp-action="Index">
+                            Learn TKD
+                        </a>
+                    </li>
+                    <li>
+                        <a class="block px-4 py-2 text-sm hover:bg-gray-100" asp-area="Identity" asp-page="/Account/Manage/Index" id="navbarDarkDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
                             Account
                         </a>
                     </li>
                     @if (User.IsInRole("Admin"))
                     {
                         <li>
-                            <a class="block px-4 py-2 text-sm" asp-area="Admin" asp-controller="Admin" asp-action="Index">Administration</a>
+                            <a class="block px-4 py-2 text-sm hover:bg-gray-100" asp-area="Admin" asp-controller="Admin" asp-action="Index">Administration</a>
                         </li>
                     }
                     <li>
-                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" class="block px-4 py-2 text-sm">Logout</button>
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="block px-4 text-start py-2 text-sm hover:bg-gray-100 w-full">Logout</button>
                         </form>
                     </li>
                 </ul>
