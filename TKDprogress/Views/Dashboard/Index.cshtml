@@ -1,0 +1,109 @@
+﻿@model StatusTulCategoryViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_SideLayout.cshtml";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<div class="h-screen flex flex-col justify-center relative md:static top-40 md:top-0">
+    <div class="md:flex">
+        <div class="w-full">
+            <h1 class="text-4xl text-center font-medium">Tuls</h1>
+            <div class="py-6" id="pie-tul-chart"></div>
+        </div>
+        <div class="w-full">
+            <h1 class="text-4xl text-center font-medium">Terminology categories</h1>
+            <div class="py-6" id="pie-category-chart"></div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden" id="TUnlearned">@Model.StatusTul.UnlearnedPercentage</div>
+<div class="hidden" id="TInProgress">@Model.StatusTul.InProgressPercentage</div>
+<div class="hidden" id="TLearned">@Model.StatusTul.LearnedPercentage</div>
+
+<div class="hidden" id="CUnlearned">@Model.StatusCategory.UnlearnedPercentage</div>
+<div class="hidden" id="CInProgress">@Model.StatusCategory.InProgressPercentage</div>
+<div class="hidden" id="CLearned">@Model.StatusCategory.LearnedPercentage</div>
+
+
+<script>
+    function createPieChart(containerId, dataDivPrefix, colors) {
+        const data = {
+            unlearned: parseFloat(document.getElementById(dataDivPrefix + 'Unlearned').textContent),
+            inProgress: parseFloat(document.getElementById(dataDivPrefix + 'InProgress').textContent),
+            learned: parseFloat(document.getElementById(dataDivPrefix + 'Learned').textContent),
+        };
+
+        const getChartOptions = () => {
+            return {
+                series: [data.unlearned, data.inProgress, data.learned],
+                colors: colors,
+                chart: {
+                    height: 420,
+                    width: "100%",
+                    type: "pie",
+                },
+                stroke: {
+                    colors: ["white"],
+                    lineCap: "",
+                },
+                plotOptions: {
+                    pie: {
+                        labels: {
+                            show: true,
+                        },
+                        size: "100%",
+                        dataLabels: {
+                            offset: -25,
+                        },
+                    },
+                },
+                labels: ["Unlearned", "In Progress", "Learned"],
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontFamily: "Inter, sans-serif",
+                    },
+                },
+                legend: {
+                    position: "bottom",
+                    fontFamily: "Inter, sans-serif",
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value + "%";
+                        },
+                    },
+                },
+                xaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value + "%";
+                        },
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                },
+            };
+        };
+
+        if (document.getElementById(containerId) && typeof ApexCharts !== 'undefined') {
+            const chart = new ApexCharts(document.getElementById(containerId), getChartOptions());
+            chart.render();
+        }
+    }
+
+    window.addEventListener("load", function () {
+        createPieChart("pie-tul-chart", "T", ["#1C64F2", "#16BDCA", "#9061F9"]);
+        createPieChart("pie-category-chart", "C", ["#1C64F2", "#16BDCA", "#9061F9"]);
+    });
+
+</script>

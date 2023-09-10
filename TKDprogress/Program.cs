@@ -55,6 +55,11 @@ namespace TKDprogress
             builder.Services.AddScoped<IUserTulService, UserTulService>();
             builder.Services.AddScoped<IUserTulRepository, UserTulRepository>();
 
+            builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+            builder.Services.AddScoped<IStatusService, StatusService>();
+
+            builder.Services.AddScoped<IPercentageCalculationService, PercentageCalculationService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
