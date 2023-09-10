@@ -18,6 +18,21 @@ namespace TKDprogress.Controllers
             return View();
         }
 
+        public IActionResult Tul()
+        {
+            return View();
+        }
+
+        public IActionResult Terminology()
+        {
+            return View();
+        }
+
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
