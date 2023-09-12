@@ -71,10 +71,12 @@
                                         </button>
                                     </div>
 
-                                    <div class="ml-7 xl:ml-10">
+                                    <div class="ml-7 xl:ml-10 flex gap-10 pt-1">
                                         <div class="lg:text-sm lg:font-medium">
                                             <partial name="_LoginPartial" />
                                         </div>
+
+                                        @await Html.PartialAsync("_SelectLanguagePartial")
                                     </div>
                                 </div>
                             </div>

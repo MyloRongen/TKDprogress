@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using TKDprogress_BLL.Interfaces;
 using TKDprogress_BLL.Services;
 using TKDprogress_DAL.Data;
@@ -60,7 +64,67 @@ namespace TKDprogress
 
             builder.Services.AddScoped<IPercentageCalculationService, PercentageCalculationService>();
 
+
+            /*builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            builder.Services.AddMvc()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-US"),
+                    new CultureInfo("nl-NL"),
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("en-US");
+                options.AddSupportedUICultures("en-US", "nl-NL");
+                options.FallBackToParentUICultures = true;
+
+                options.AddInitialRequestCultureProvider(new CustomRequestCultureProvider(async context =>
+                {
+                    return await Task.FromResult(new ProviderCultureResult("en"));
+                }));
+            });
+
+            builder.Services.AddRazorPages().AddViewLocalization();
+*/
+
+            /*builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+
+            builder.Services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-US"),
+                    new CultureInfo("nl-NL"),
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("en-US");
+                options.AddSupportedUICultures("en-US", "nl-NL");
+                options.FallBackToParentUICultures = true;
+
+                options.RequestCultureProviders.Remove((IRequestCultureProvider)typeof(AcceptLanguageHeaderRequestCultureProvider));
+            });*/
+
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+            builder.Services.AddRazorPages().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+
             var app = builder.Build();
+
+            var supportedCultures = new[] { "en-US", "nl-NL" };
+            var localizationOoptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOoptions);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -73,6 +137,8 @@ namespace TKDprogress
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+/*            app.UseRequestLocalization();*/
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
