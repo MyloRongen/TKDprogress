@@ -12,5 +12,7 @@ namespace TKDprogress_SL.Entities
 
         public string Name { get; set; }
         public string ImageUrl { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TKDprogress_DAL.Data;
+using TKDprogress_DAL.Entities;
 using TKDprogress_SL.Entities;
 using TKDprogress_SL.Interfaces;
 
@@ -18,8 +19,9 @@ namespace TKDprogress_DAL.Repositories
         {
             List<CategoryDto> categories = new();
 
-            using (MySqlConnection connection = new(_connectionString))
+            try
             {
+                using MySqlConnection connection = new(_connectionString);
                 await connection.OpenAsync();
 
                 string query = "SELECT Id, Name, Description FROM Categories";
@@ -43,6 +45,13 @@ namespace TKDprogress_DAL.Repositories
                     categories.Add(category);
                 }
             }
+            catch
+            {
+                categories = new()
+                {
+                    new CategoryDto { ErrorMessage = "De categories could not be loaded." }
+                };
+            }
 
             return categories;
         }
@@ -51,8 +60,9 @@ namespace TKDprogress_DAL.Repositories
         {
             CategoryDto? category = new();
 
-            using (MySqlConnection connection = new(_connectionString))
+            try
             {
+                using MySqlConnection connection = new(_connectionString);
                 await connection.OpenAsync();
 
                 string query = "SELECT Id, Name, Description FROM Categories WHERE Id = @Id";
@@ -70,6 +80,10 @@ namespace TKDprogress_DAL.Repositories
                         Description = reader.GetString("Description"),
                     };
                 }
+            }
+            catch
+            {
+                category.ErrorMessage = "An error occurred while trying to get the category.";
             }
 
             return category;

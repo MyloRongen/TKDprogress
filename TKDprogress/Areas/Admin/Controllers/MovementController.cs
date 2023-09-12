@@ -7,6 +7,7 @@ using TKDprogress.Models.CreateModels;
 using TKDprogress.Models.UpdateModels;
 using TKDprogress_BLL.Interfaces;
 using TKDprogress_BLL.Services;
+using TKDprogress_DAL.Entities;
 using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Areas.Admin.Controllers
@@ -28,6 +29,19 @@ namespace TKDprogress.Areas.Admin.Controllers
         {
             List<MovementDto> movements = await _movementService.GetMovementsAsync(searchString);
 
+            if (movements.Any(m => m.ErrorMessage != null))
+            {
+                foreach (MovementDto movement in movements)
+                {
+                    if (movement.ErrorMessage != null)
+                    {
+                        TempData["ErrorMessage"] = movement.ErrorMessage;
+                    }
+                }
+
+                return View(new List<MovementViewModel>());
+            }
+
             List<MovementViewModel> movementViewModels = movements.Select(movement => new MovementViewModel
             {
                 Id = movement.Id,
@@ -40,10 +54,10 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            try
-            {
-                MovementDto movement = await _movementService.GetMovementByIdAsync(id);
+            MovementDto movement = await _movementService.GetMovementByIdAsync(id);
 
+            if (movement.ErrorMessage == null)
+            {
                 MovementViewModel movementViewModel = new()
                 {
                     Id = movement.Id,
@@ -53,11 +67,9 @@ namespace TKDprogress.Areas.Admin.Controllers
 
                 return View(movementViewModel);
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = "An error occurred while fetching category details: " + ex.Message;
-                return View();
-            }
+
+            TempData["ErrorMessage"] = movement.ErrorMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         public ActionResult Create()
@@ -87,9 +99,16 @@ namespace TKDprogress.Areas.Admin.Controllers
                 ImageUrl = movementViewModel.ImageUrl,
             };
 
-            _ = await _movementService.CreateMovementAsync(movement);
+            movement = await _movementService.CreateMovementAsync(movement);
 
-            return RedirectToAction("Index");
+            if (movement.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = movement.ErrorMessage;
+                return View(movementViewModel);
+            }
+
+            TempData["StatusMessage"] = "The movement was successfully created!";
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Edit(int id)
@@ -125,8 +144,15 @@ namespace TKDprogress.Areas.Admin.Controllers
                 ImageUrl = movementViewModel.ImageUrl,
             };
 
-            _ = await _movementService.UpdateMovementAsync(movement);
+            movement = await _movementService.UpdateMovementAsync(movement);
 
+            if (movement.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = movement.ErrorMessage;
+                return View(movementViewModel);
+            }
+
+            TempData["StatusMessage"] = "The movement was successfully updated!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -153,6 +179,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
             try
             {
+                TempData["StatusMessage"] = "The movement was successfully deleted!";
                 return RedirectToAction(nameof(Index));
             }
             catch

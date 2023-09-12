@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TKDprogress.Models;
 using TKDprogress_BLL.Interfaces;
 using TKDprogress_BLL.Services;
+using TKDprogress_DAL.Entities;
 using TKDprogress_DAL.Repositories;
 using TKDprogress_SL.Entities;
 
@@ -23,6 +24,19 @@ namespace TKDprogress.Areas.Admin.Controllers
         public async Task<ActionResult> IndexAsync(string searchString)
         {
             List<CategoryDto> categories = await _categoryService.GetCategoriesAsync(searchString);
+
+            if (categories.Any(c => c.ErrorMessage != null))
+            {
+                foreach (CategoryDto category in categories)
+                {
+                    if (category.ErrorMessage != null)
+                    {
+                        TempData["ErrorMessage"] = category.ErrorMessage;
+                    }
+                }
+
+                return View(new List<CategoryViewModel>());
+            }
 
             List<CategoryViewModel> categoryViewModels = categories.Select(category => new CategoryViewModel
             {

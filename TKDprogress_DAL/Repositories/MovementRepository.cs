@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_DAL.Entities;
 using TKDprogress_SL.Entities;
 using TKDprogress_SL.Interfaces;
 
@@ -17,8 +18,9 @@ namespace TKDprogress_DAL.Repositories
         {
             List<MovementDto> movements = new();
 
-            using (MySqlConnection connection = new(_connectionString))
+            try
             {
+                using MySqlConnection connection = new(_connectionString);
                 await connection.OpenAsync();
 
                 string query = "SELECT Id, Name, ImageUrl FROM Movements";
@@ -42,6 +44,13 @@ namespace TKDprogress_DAL.Repositories
                     movements.Add(movement);
                 }
             }
+            catch 
+            {
+                movements = new()
+                {
+                    new MovementDto { ErrorMessage = "De movements could not be loaded." }
+                };
+            }
 
             return movements;
         }
@@ -50,8 +59,9 @@ namespace TKDprogress_DAL.Repositories
         {
             MovementDto? movement = new();
 
-            using (MySqlConnection connection = new(_connectionString))
+            try
             {
+                using MySqlConnection connection = new(_connectionString);
                 await connection.OpenAsync();
 
                 string query = "SELECT Id, Name, ImageUrl FROM Movements WHERE Id = @Id";
@@ -70,39 +80,65 @@ namespace TKDprogress_DAL.Repositories
                     };
                 }
             }
+            catch
+            {
+                movement.ErrorMessage = "An error occurred while trying to get the movement.";
+            }
 
             return movement;
         }
 
         public async Task<MovementDto> CreateMovementAsync(MovementDto movement)
         {
-            string query = "INSERT INTO Movements (Name, ImageUrl) VALUES (@Name, @ImageUrl)";
-            await ExecuteNonQueryAsync(query, command =>
+            try
             {
-                command.Parameters.AddWithValue("@Name", movement.Name);
-                command.Parameters.AddWithValue("@ImageUrl", movement.ImageUrl);
-            });
+                string query = "INSERT INTO Movements (Name, ImageUrl) VALUES (@Name, @ImageUrl)";
+                await ExecuteNonQueryAsync(query, command =>
+                {
+                    command.Parameters.AddWithValue("@Name", movement.Name);
+                    command.Parameters.AddWithValue("@ImageUrl", movement.ImageUrl);
+                });
+            }
+            catch
+            {
+                movement.ErrorMessage = "An error occurred while creating the movement.";
+            }
 
             return movement;
         }
 
         public async Task<MovementDto> DeleteMovementAsync(MovementDto movement)
         {
-            string query = "DELETE FROM Movements WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", movement.Id));
+            try
+            {
+                string query = "DELETE FROM Movements WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", movement.Id));
 
-            return movement;
+            }
+            catch
+            {
+                movement.ErrorMessage = "An error occurred while deleting the movement.";
+            }
+
+            return movement;           
         }
 
         public async Task<MovementDto> UpdateMovementAsync(MovementDto newMovement)
         {
-            string query = "UPDATE Movements SET Name = @Name, ImageUrl = @ImageUrl WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command =>
+            try
             {
-                command.Parameters.AddWithValue("@Id", newMovement.Id);
-                command.Parameters.AddWithValue("@Name", newMovement.Name);
-                command.Parameters.AddWithValue("@ImageUrl", newMovement.ImageUrl);
-            });
+                string query = "UPDATE Movements SET Name = @Name, ImageUrl = @ImageUrl WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command =>
+                {
+                    command.Parameters.AddWithValue("@Id", newMovement.Id);
+                    command.Parameters.AddWithValue("@Name", newMovement.Name);
+                    command.Parameters.AddWithValue("@ImageUrl", newMovement.ImageUrl);
+                });
+            }
+            catch
+            {
+                newMovement.ErrorMessage = "An error occurred while updating the movement.";
+            }
 
             return newMovement;
         }
