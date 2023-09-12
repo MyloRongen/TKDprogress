@@ -12,5 +12,7 @@ namespace TKDprogress.Models
         public int CategoryId { get; set; }
         public CategoryViewModel Category { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

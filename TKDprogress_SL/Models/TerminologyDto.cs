@@ -15,5 +15,7 @@ namespace TKDprogress_SL.Entities
 
         public int CategoryId { get; set; }
         public CategoryDto Category { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

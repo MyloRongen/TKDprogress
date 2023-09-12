@@ -130,6 +130,9 @@ Taekwondo heeft een uitgebreide lijst van Koreaanse termen en uitdrukkingen die 
   <data name="StartNow" xml:space="preserve">
     <value>Begin nu</value>
   </data>
+  <data name="Terminology" xml:space="preserve">
+    <value>Terminologie</value>
+  </data>
   <data name="TulsTerminology" xml:space="preserve">
     <value>Tuls en Terminologie in Taekwondo </value>
   </data>

@@ -160,11 +160,11 @@ namespace TKDprogress.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
-            await _categoryService.DeleteCategoryAsync(category);
-
             try
             {
+                CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
+                await _categoryService.DeleteCategoryAsync(category);
+
                 TempData["StatusMessage"] = "The category was successfully deleted!";
                 return RedirectToAction(nameof(Index));
             }

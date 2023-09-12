@@ -174,11 +174,11 @@ namespace TKDprogress.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
-            MovementDto movement = await _movementService.GetMovementByIdAsync(id);
-            await _movementService.DeleteMovementAsync(movement);
-
             try
             {
+                MovementDto movement = await _movementService.GetMovementByIdAsync(id);
+                await _movementService.DeleteMovementAsync(movement);
+
                 TempData["StatusMessage"] = "The movement was successfully deleted!";
                 return RedirectToAction(nameof(Index));
             }

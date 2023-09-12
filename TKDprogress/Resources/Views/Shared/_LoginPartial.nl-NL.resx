@@ -117,25 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CreateAccountLearn" xml:space="preserve">
-    <value>Create an account to learn the tuls and Taekwondo terminology.</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Tuls and terminology play a crucial role in the world of Taekwondo. They form the foundation of the traditional martial art and contribute to its profound meaning and history. Let's take a look at what tuls and terminology entail exactly. Tuls refer to the series of standardized stylized exercises in Taekwondo. Each tul consists of a choreographed sequence of movements that represent fighting and defense techniques. Tuls are designed to assist the practitioner in developing muscle memory, balance, coordination, and technical skills. They vary in complexity and are typically performed as solo exercises. Taekwondo has an extensive list of Korean terms and expressions that are essential for practitioners.</value>
-  </data>
-  <data name="LearnTaekwondo" xml:space="preserve">
-    <value>Want to learn Taekwondo?</value>
-  </data>
-  <data name="StartNow" xml:space="preserve">
-    <value>Start now</value>
-  </data>
-  <data name="Terminology" xml:space="preserve">
-    <value>Terminology</value>
-  </data>
-  <data name="TulsTerminology" xml:space="preserve">
-    <value>Tuls and Terminology in Taekwondo</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Welcome to our site</value>
+  <data name="Login" xml:space="preserve">
+    <value>Inloggen</value>
   </data>
 </root>

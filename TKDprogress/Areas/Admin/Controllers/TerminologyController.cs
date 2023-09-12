@@ -5,7 +5,9 @@ using TKDprogress.Models;
 using TKDprogress.Models.CreateModels;
 using TKDprogress.Models.UpdateModels;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Services;
+using TKDprogress_DAL.Entities;
 using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Areas.Admin.Controllers
@@ -27,6 +29,19 @@ namespace TKDprogress.Areas.Admin.Controllers
         {
             List<TerminologyDto> terminologies = await _terminologyService.GetTerminologiesAsync(searchString);
 
+            if (terminologies.Any(t => t.ErrorMessage != null))
+            {
+                foreach (TerminologyDto terminology in terminologies)
+                {
+                    if (terminology.ErrorMessage != null)
+                    {
+                        TempData["ErrorMessage"] = terminology.ErrorMessage;
+                    }
+                }
+
+                return View(new List<TulViewModel>());
+            }
+
             List<TerminologyViewModel> terminologyViewModels = terminologies.Select(terminology => new TerminologyViewModel
             {
                 Id = terminology.Id,
@@ -40,10 +55,10 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            try
-            {
-                TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
+            TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
 
+            if (terminology.ErrorMessage == null)
+            {
                 TerminologyViewModel terminologyViewModel = new()
                 {
                     Id = terminology.Id,
@@ -54,11 +69,9 @@ namespace TKDprogress.Areas.Admin.Controllers
 
                 return View(terminologyViewModel);
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = "An error occurred while fetching category details: " + ex.Message;
-                return View();
-            }
+
+            TempData["ErrorMessage"] = terminology.ErrorMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Create()
@@ -96,8 +109,15 @@ namespace TKDprogress.Areas.Admin.Controllers
                 CategoryId = terminologyViewModel.CategoryId,
             };
 
-            _ = await _terminologyService.CreateTerminologyAsync(terminology);
+            terminology = await _terminologyService.CreateTerminologyAsync(terminology);
 
+            if (terminology.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = terminology.ErrorMessage;
+                return View(terminologyViewModel);
+            }
+
+            TempData["StatusMessage"] = "The terminology was successfully created!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -142,8 +162,15 @@ namespace TKDprogress.Areas.Admin.Controllers
                 CategoryId = terminologyViewModel.CategoryId,
             };
 
-            _ = await _terminologyService.UpdateTerminologyAsync(terminology);
+            terminology = await _terminologyService.UpdateTerminologyAsync(terminology);
 
+            if (terminology.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = terminology.ErrorMessage;
+                return View(terminologyViewModel);
+            }
+
+            TempData["StatusMessage"] = "The terminology was successfully updated!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -166,11 +193,12 @@ namespace TKDprogress.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
-            TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
-            await _terminologyService.DeleteTerminologyAsync(terminology);
-
             try
             {
+                TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
+                await _terminologyService.DeleteTerminologyAsync(terminology);
+
+                TempData["StatusMessage"] = "The terminology was successfully deleted!";
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -1,7 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -31,7 +28,7 @@
         <a asp-area="" asp-controller="Home" asp-action="Terminology">
             <img class="w-full h-full object-cover rounded-md transition-transform transform scale-100 group-hover:scale-105 brightness-[0.25]" src="https://i.ytimg.com/vi/ASGvV76g084/sddefault.jpg" alt="Image 2">
             <div class="absolute inset-0 flex items-center justify-center text-white text-3xl font-semibold">
-                Terminology
+                @Localizer["Terminology"]
             </div>
         </a>
     </div>
