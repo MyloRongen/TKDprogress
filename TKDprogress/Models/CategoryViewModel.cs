@@ -11,5 +11,7 @@ namespace TKDprogress.Models
         public EnumStatus? Status { get; set; }
 
         public List<TerminologyViewModel> Terminologies { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

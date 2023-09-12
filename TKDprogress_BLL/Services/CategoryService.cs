@@ -27,27 +27,61 @@ namespace TKDprogress_BLL.Services
 
         public async Task<CategoryDto> GetCategoryByIdAsync(int id)
         {
-            CategoryDto artist = await _categoryRepository.GetCategoryByIdAsync(id);
+            if (id <= 0)
+            {
+                return new CategoryDto { ErrorMessage = "Invalid category." };
+            }
 
-            return artist;
+            CategoryDto category = await _categoryRepository.GetCategoryByIdAsync(id);
+
+            if (category.Id <= 0)
+            {
+                return new CategoryDto { ErrorMessage = "Category not found." };
+            }
+
+            return category;
         }
 
         public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category)
         {
-            await _categoryRepository.CreateCategoryAsync(category);
+            if (string.IsNullOrEmpty(category.Name) || string.IsNullOrEmpty(category.Description))
+            {
+                category.ErrorMessage =  "Category name or description has an incorrect input.";
+                return category;
+            }
+
+            category = await _categoryRepository.CreateCategoryAsync(category);
 
             return category;
         }
 
         public async Task<CategoryDto> UpdateCategoryAsync(CategoryDto category)
         {
-            await _categoryRepository.UpdateCategoryAsync(category);
+            if (category.Id <= 0)
+            {
+                category.ErrorMessage = "Category type does not exist.";
+                return category;
+            }
+
+            if (string.IsNullOrEmpty(category.Name) || string.IsNullOrEmpty(category.Description))
+            {
+                category.ErrorMessage = "Category name or description has an incorrect input.";
+                return category;
+            }
+
+            category = await _categoryRepository.UpdateCategoryAsync(category);
 
             return category;
         }
 
         public async Task<CategoryDto> DeleteCategoryAsync(CategoryDto category)
         {
+            if (category.Id <= 0)
+            {
+                category.ErrorMessage = "Category type does not exist.";
+                return category;
+            }
+
             await _categoryRepository.DeleteCategoryAsync(category);
 
             return category;

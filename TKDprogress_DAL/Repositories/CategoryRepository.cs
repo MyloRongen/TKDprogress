@@ -78,33 +78,54 @@ namespace TKDprogress_DAL.Repositories
 
         public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category)
         {
-            string query = "INSERT INTO Categories (Name, Description) VALUES (@Name, @Description)";
-            await ExecuteNonQueryAsync(query, command =>
+            try
             {
-                command.Parameters.AddWithValue("@Name", category.Name);
-                command.Parameters.AddWithValue("@Description", category.Description);
-            });
+                string query = "INSERT INTO Categories (Name, Description) VALUES (@Name, @Description)";
+                await ExecuteNonQueryAsync(query, command =>
+                {
+                    command.Parameters.AddWithValue("@Name", category.Name);
+                    command.Parameters.AddWithValue("@Description", category.Description);
+                });
+            }
+            catch 
+            {
+                category.ErrorMessage = "An error occurred while creating the category.";
+            }
 
             return category;
         }
 
         public async Task<CategoryDto> DeleteCategoryAsync(CategoryDto category)
         {
-            string query = "DELETE FROM Categories WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", category.Id));
+            try
+            {
+                string query = "DELETE FROM Categories WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", category.Id));
+            }
+            catch
+            {
+                category.ErrorMessage = "An error occurred while deleting the category.";
+            }
 
             return category;
         }
 
         public async Task<CategoryDto> UpdateCategoryAsync(CategoryDto newCategory)
         {
-            string query = "UPDATE Categories SET Name = @Name, Description = @Description WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command =>
+            try
             {
-                command.Parameters.AddWithValue("@Id", newCategory.Id);
-                command.Parameters.AddWithValue("@Name", newCategory.Name);
-                command.Parameters.AddWithValue("@Description", newCategory.Description);
-            });
+                string query = "UPDATE Categories SET Name = @Name, Description = @Description WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command =>
+                {
+                    command.Parameters.AddWithValue("@Id", newCategory.Id);
+                    command.Parameters.AddWithValue("@Name", newCategory.Name);
+                    command.Parameters.AddWithValue("@Description", newCategory.Description);
+                });
+            }
+            catch
+            {
+                newCategory.ErrorMessage = "An error occurred while updating the category.";
+            }
 
             return newCategory;
         }

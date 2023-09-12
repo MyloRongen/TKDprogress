@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TKDprogress_BLL", "TKDprogr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TKDprogress_DAL", "TKDprogress_DAL\TKDprogress_DAL.csproj", "{38876053-B529-4946-939E-8F0EF4CAAF4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKDprogress_SL", "TKDprogress_SL\TKDprogress_SL.csproj", "{E0680806-7DBB-44FA-B10C-AA2D2937413F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TKDprogress_SL", "TKDprogress_SL\TKDprogress_SL.csproj", "{E0680806-7DBB-44FA-B10C-AA2D2937413F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TKDprogress_UnitTest", "TKDprogress_UnitTest\TKDprogress_UnitTest.csproj", "{56D16EA2-42F4-4CEE-B2DA-689D4A9907AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E0680806-7DBB-44FA-B10C-AA2D2937413F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0680806-7DBB-44FA-B10C-AA2D2937413F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0680806-7DBB-44FA-B10C-AA2D2937413F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D16EA2-42F4-4CEE-B2DA-689D4A9907AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D16EA2-42F4-4CEE-B2DA-689D4A9907AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D16EA2-42F4-4CEE-B2DA-689D4A9907AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D16EA2-42F4-4CEE-B2DA-689D4A9907AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

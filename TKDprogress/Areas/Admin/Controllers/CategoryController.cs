@@ -22,32 +22,24 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> IndexAsync(string searchString)
         {
-/*            try
-            {*/
-                List<CategoryDto> categories = await _categoryService.GetCategoriesAsync(searchString);
+            List<CategoryDto> categories = await _categoryService.GetCategoriesAsync(searchString);
 
-                List<CategoryViewModel> categoryViewModels = categories.Select(category => new CategoryViewModel
-                {
-                    Id = category.Id,
-                    Name = category.Name,
-                    Description = category.Description,
-                }).ToList();
-
-                return View(categoryViewModels);
-/*            }
-            catch (Exception ex)
+            List<CategoryViewModel> categoryViewModels = categories.Select(category => new CategoryViewModel
             {
-                ViewBag.ErrorMessage = "An error occurred while fetching category index.";
-                return View();
-            }*/
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+            }).ToList();
+
+            return View(categoryViewModels);
         }
 
         public async Task<ActionResult> Details(int id)
         {
-            try
-            {
-                CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
+            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
 
+            if (category.ErrorMessage == null)
+            {
                 CategoryViewModel categoryViewModel = new()
                 {
                     Id = category.Id,
@@ -57,11 +49,9 @@ namespace TKDprogress.Areas.Admin.Controllers
 
                 return View(categoryViewModel);
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = "An error occurred while fetching category details: " + ex.Message;
-                return View();
-            }
+
+            TempData["ErrorMessage"] = category.ErrorMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         public ActionResult Create()
@@ -84,8 +74,15 @@ namespace TKDprogress.Areas.Admin.Controllers
                 Description = categoryViewModel.Description
             };
 
-            _ = await _categoryService.CreateCategoryAsync(category);
+            category = await _categoryService.CreateCategoryAsync(category);
 
+            if (category.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = category.ErrorMessage;
+                return View(categoryViewModel);
+            }
+
+            TempData["StatusMessage"] = "The category was successfully created!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -119,8 +116,15 @@ namespace TKDprogress.Areas.Admin.Controllers
                 Description = categoryViewModel.Description,
             };
 
-            _ = await _categoryService.UpdateCategoryAsync(category);
+            category = await _categoryService.UpdateCategoryAsync(category);
 
+            if (category.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = category.ErrorMessage;
+                return View(categoryViewModel);
+            }
+
+            TempData["StatusMessage"] = "The category was successfully updated!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -147,6 +151,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
             try
             {
+                TempData["StatusMessage"] = "The category was successfully deleted!";
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -13,5 +13,7 @@ namespace TKDprogress_SL.Entities
         public string Description { get; set; }
 
         public List<TerminologyDto> Terminologies { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

@@ -6,14 +6,7 @@
 }
 
 <div class="h-screen">
-    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-    {
-        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full">
-            @ViewBag.ErrorMessage
-        </div>
-    }
-    else
-    {
+       
         <div class="shadow-lg">
             <div class="flex flex-col justify-center pl-20">
                 <h1 class="text-3xl py-6 font-medium">Categories</h1>
@@ -21,6 +14,20 @@
         </div>
 
         <div class="px-2 md:px-20 pt-10">
+
+        @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
+        {
+            <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-green-500 w-full mb-10">
+                @TempData["StatusMessage"]
+            </div>
+        }
+
+        @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+        {
+            <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full mb-10">
+                @TempData["ErrorMessage"]
+            </div>
+        }
             
             <div class="flex justify-between">
                 @using (Html.BeginForm("Index", "Category", FormMethod.Get))
@@ -86,6 +93,5 @@
                     </tbody>
                 </table>
             </div>
-        </div>     
-    }   
+        </div>      
 </div>
