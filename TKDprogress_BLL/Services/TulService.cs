@@ -27,6 +27,12 @@ namespace TKDprogress_BLL.Services
 
         public async Task<TulDto> CreateTulAsync(TulDto newTul)
         {
+            if (string.IsNullOrEmpty(newTul.Name) || string.IsNullOrEmpty(newTul.Description))
+            {
+                newTul.ErrorMessage = "Tul name or description has an incorrect input.";
+                return newTul;
+            }
+
             TulDto tul =  await _tulRepository.CreateTulAsync(newTul);
 
             return tul;
@@ -34,6 +40,18 @@ namespace TKDprogress_BLL.Services
 
         public async Task<TulDto> UpdateTulAsync(TulDto newTul)
         {
+            if (newTul.Id <= 0)
+            {
+                newTul.ErrorMessage = "Tul type does not exist.";
+                return newTul;
+            }
+
+            if (string.IsNullOrEmpty(newTul.Name) || string.IsNullOrEmpty(newTul.Description))
+            {
+                newTul.ErrorMessage = "Tul name or description has an incorrect input.";
+                return newTul;
+            }
+
             TulDto tul = await _tulRepository.UpdateTulAsync(newTul);
 
             return tul;
@@ -41,6 +59,12 @@ namespace TKDprogress_BLL.Services
 
         public async Task<TulDto> DeleteTulAsync(TulDto tul)
         {
+            if (tul.Id <= 0)
+            {
+                tul.ErrorMessage = "Tul type does not exist.";
+                return tul;
+            }
+
             await _tulRepository.DeleteTulAsync(tul);
 
             return tul;

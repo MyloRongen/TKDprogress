@@ -11,6 +11,19 @@
             <h1 class="text-3xl py-6 font-medium">Update tul</h1>
         </div>
     </div>
+    @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-green-500 w-full mb-10">
+            @TempData["StatusMessage"]
+        </div>
+    }
+
+    @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full mb-10">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     <div class="pt-10 pl-0 md:pl-20">
         <div class="absolute ml-4">
             <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Terug</a>

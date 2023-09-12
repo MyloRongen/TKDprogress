@@ -13,5 +13,7 @@ namespace TKDprogress_SL.Entities
         public string Description { get; set; }
 
         public List<MovementDto> Movements { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

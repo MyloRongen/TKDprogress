@@ -12,5 +12,7 @@ namespace TKDprogress.Models
         public EnumStatus? Status { get; set; }
 
         public List<MovementDto>? Movements { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

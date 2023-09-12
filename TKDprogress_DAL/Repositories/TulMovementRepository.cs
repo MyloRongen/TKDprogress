@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TKDprogress_SL.Entities;
 using TKDprogress_SL.Interfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -34,12 +33,14 @@ namespace TKDprogress_DAL.Repositories
 
         public async Task<TulDto> GetTulWithMovementByIdAsync(int tulId)
         {
-            TulDto? tulWithMovements = null;
+            TulDto? tulWithMovement = new();
 
-            using MySqlConnection connection = new(_connectionString);
-            await connection.OpenAsync();
+            try
+            {
+                using MySqlConnection connection = new(_connectionString);
+                await connection.OpenAsync();
 
-            string query = @"
+                string query = @"
                 SELECT t.Id, t.Name AS TulName, t.Description, m.Id AS MovementId, m.Name AS MovementName, m.ImageUrl
                 FROM Tuls AS t
                 LEFT JOIN TulMovements AS tm ON t.Id = tm.TulId
@@ -47,37 +48,45 @@ namespace TKDprogress_DAL.Repositories
                 WHERE t.Id = @TulId
                 ORDER BY tm.Order";
 
-            using MySqlCommand command = new(query, connection);
-            command.Parameters.AddWithValue("@TulId", tulId);
+                using MySqlCommand command = new(query, connection);
+                command.Parameters.AddWithValue("@TulId", tulId);
 
-            using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
 
-            while (reader.Read())
-            {
-                if (tulWithMovements == null)
+                while (reader.Read())
                 {
-                    tulWithMovements = new TulDto
+                    if (tulWithMovement.Id == 0)
                     {
-                        Id = reader.GetInt32("Id"),
-                        Name = reader.GetString("TulName"),
-                        Description = reader.GetString("Description"),
-                        Movements = new List<MovementDto>()
-                    };
-                }
+                        tulWithMovement = new TulDto
+                        {
+                            Id = reader.GetInt32("Id"),
+                            Name = reader.GetString("TulName"),
+                            Description = reader.GetString("Description"),
+                            Movements = new List<MovementDto>()
+                        };
+                    }
 
-                int? movementId = reader["MovementId"] as int?;
-                if (movementId.HasValue)
-                {
-                    tulWithMovements.Movements.Add(new MovementDto
+                    int? movementId = reader["MovementId"] as int?;
+                    if (movementId.HasValue)
                     {
-                        Id = movementId.Value,
-                        Name = reader.GetString("MovementName"),
-                        ImageUrl = reader.GetString("ImageUrl")
-                    });
+                        tulWithMovement.Movements.Add(new MovementDto
+                        {
+                            Id = movementId.Value,
+                            Name = reader.GetString("MovementName"),
+                            ImageUrl = reader.GetString("ImageUrl")
+                        });
+                    }
                 }
             }
+            catch
+            {
+                tulWithMovement = new()
+                {
+                    ErrorMessage = "An error occurred while trying to get the tul."
+                };
+            }
 
-            return tulWithMovements;
+            return tulWithMovement;
         }
 
         public async Task DeleteTulMovementsAsync(int tulId)

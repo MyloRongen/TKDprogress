@@ -21,6 +21,20 @@
         </div>
 
         <div class="px-2 md:px-20 pt-10">
+
+            @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
+            {
+                <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-green-500 w-full mb-10">
+                    @TempData["StatusMessage"]
+                </div>
+            }
+
+            @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+            {
+                <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full mb-10">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
             
             <div class="flex justify-between">
                 @using (Html.BeginForm("Index", "Tul", FormMethod.Get))

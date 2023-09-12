@@ -34,7 +34,17 @@ namespace TKDprogress_BLL.Services
 
         public async Task<TulDto> GetTulWithMovementByIdAsync(int tulId)
         {
+            if (tulId <= 0)
+            {
+                return new TulDto { ErrorMessage = "Invalid tul." };
+            }
+
             TulDto tul = await _tulMovementRepository.GetTulWithMovementByIdAsync(tulId);
+
+            if (tul.Id <= 0)
+            {
+                return new TulDto { ErrorMessage = "Tul not found." };
+            }
 
             return tul;
         }

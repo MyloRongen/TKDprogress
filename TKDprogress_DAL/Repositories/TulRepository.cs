@@ -17,8 +17,9 @@ namespace TKDprogress_DAL.Repositories
         {
             List<TulDto> tuls = new();
 
-            using (MySqlConnection connection = new(_connectionString))
+            try
             {
+                using MySqlConnection connection = new(_connectionString);
                 await connection.OpenAsync();
 
                 string query = "SELECT Id, Name, Description FROM Tuls";
@@ -42,53 +43,81 @@ namespace TKDprogress_DAL.Repositories
                     tuls.Add(tul);
                 }
             }
+            catch
+            {
+                tuls = new()
+                {
+                    new TulDto { ErrorMessage = "De tuls could not be loaded." }
+                };
+            }
 
             return tuls;
         }
 
         public async Task<TulDto> CreateTulAsync(TulDto newTul)
         {
-            string insertQuery = "INSERT INTO Tuls (Name, Description) VALUES (@Name, @Description); SELECT LAST_INSERT_ID();";
-
-            int tulId = 0;
-
-            using MySqlConnection connection = new MySqlConnection(_connectionString);
-            await connection.OpenAsync();
-
-            using MySqlCommand command = new MySqlCommand(insertQuery, connection);
-            command.Parameters.AddWithValue("@Name", newTul.Name);
-            command.Parameters.AddWithValue("@Description", newTul.Description);
-
-            using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
-
-            if (reader.HasRows)
+            try
             {
-                await reader.ReadAsync();
-                tulId = Convert.ToInt32(reader[0]);
-            }
+                string insertQuery = "INSERT INTO Tuls (Name, Description) VALUES (@Name, @Description); SELECT LAST_INSERT_ID();";
 
-            newTul.Id = tulId;
+                using MySqlConnection connection = new(_connectionString);
+                await connection.OpenAsync();
+
+                using MySqlCommand command = new(insertQuery, connection);
+                command.Parameters.AddWithValue("@Name", newTul.Name);
+                command.Parameters.AddWithValue("@Description", newTul.Description);
+
+                using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
+
+                int tulId = 0;
+
+                if (reader.HasRows)
+                {
+                    await reader.ReadAsync();
+                    tulId = Convert.ToInt32(reader[0]);
+                }
+
+                newTul.Id = tulId;
+            }
+            catch
+            {
+                newTul.ErrorMessage = "An error occurred while creating the tul.";
+            }
 
             return newTul;
         }
 
         public async Task<TulDto> DeleteTulAsync(TulDto tul)
         {
-            string query = "DELETE FROM Tuls WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", tul.Id));
+            try
+            {
+                string query = "DELETE FROM Tuls WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", tul.Id));
+            }
+            catch
+            {
+                tul.ErrorMessage = "An error occurred while deleting the tul.";
+            }
 
             return tul;
         }
 
         public async Task<TulDto> UpdateTulAsync(TulDto newTul)
         {
-            string query = "UPDATE Tuls SET Name = @Name, Description = @Description WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command =>
+            try
             {
-                command.Parameters.AddWithValue("@Id", newTul.Id);
-                command.Parameters.AddWithValue("@Name", newTul.Name);
-                command.Parameters.AddWithValue("@Description", newTul.Description);
-            });
+                string query = "UPDATE Tuls SET Name = @Name, Description = @Description WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command =>
+                {
+                    command.Parameters.AddWithValue("@Id", newTul.Id);
+                    command.Parameters.AddWithValue("@Name", newTul.Name);
+                    command.Parameters.AddWithValue("@Description", newTul.Description);
+                });
+            }
+            catch
+            {
+                newTul.ErrorMessage = "An error occurred while creating the tul.";
+            }
 
             return newTul;
         }

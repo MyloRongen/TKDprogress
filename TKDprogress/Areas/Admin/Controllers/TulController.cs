@@ -33,6 +33,19 @@ namespace TKDprogress.Areas.Admin.Controllers
         {
             List<TulDto> tuls = await _tulService.GetTulsAsync(searchString);
 
+            if (tuls.Any(t => t.ErrorMessage != null))
+            {
+                foreach (TulDto tul in tuls)
+                {
+                    if (tul.ErrorMessage != null)
+                    {
+                        TempData["ErrorMessage"] = tul.ErrorMessage;
+                    }
+                }
+
+                return View(new List<TulViewModel>());
+            }
+
             List<TulViewModel> tulViewModels = tuls.Select(tul => new TulViewModel
             {
                 Id = tul.Id,
@@ -47,20 +60,26 @@ namespace TKDprogress.Areas.Admin.Controllers
         {
             TulDto tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
 
-            TulViewModel tulViewModel = new()
+            if (tul.ErrorMessage == null)
             {
-                Id = tul.Id,
-                Name = tul.Name,
-                Description = tul.Description,
-                Movements = tul.Movements.Select(movement => new MovementDto
+                TulViewModel tulViewModel = new()
                 {
-                    Id = movement.Id,
-                    Name = movement.Name,
-                    ImageUrl = movement.ImageUrl,
-                }).ToList(),
-            };
+                    Id = tul.Id,
+                    Name = tul.Name,
+                    Description = tul.Description,
+                    Movements = tul.Movements.Select(movement => new MovementDto
+                    {
+                        Id = movement.Id,
+                        Name = movement.Name,
+                        ImageUrl = movement.ImageUrl,
+                    }).ToList(),
+                };
 
-            return View(tulViewModel);
+                return View(tulViewModel);
+            }
+
+            TempData["ErrorMessage"] = tul.ErrorMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Create()
@@ -99,6 +118,12 @@ namespace TKDprogress.Areas.Admin.Controllers
 
             TulDto tul = await _tulService.CreateTulAsync(newTul);
 
+            if (tul.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = tul.ErrorMessage;
+                return View(tulViewModel);
+            }
+
             try
             {
                 StringValues tulMovementsJson = collection["TulMovements"];
@@ -106,6 +131,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
                 await _tulMovementService.AttachMovementsToTulAsync(tul, tulMovements);
 
+                TempData["StatusMessage"] = "The tul was successfully created!";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -152,7 +178,13 @@ namespace TKDprogress.Areas.Admin.Controllers
                 Description = tulViewModel.Description
             };
 
-            _ = await _tulService.UpdateTulAsync(newTul);
+            newTul = await _tulService.UpdateTulAsync(newTul);
+
+            if (newTul.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = newTul.ErrorMessage;
+                return View(tulViewModel);
+            }
 
             try
             {
@@ -165,6 +197,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                     await _tulMovementService.AttachMovementsToTulAsync(newTul, tulMovements);
                 }
 
+                TempData["StatusMessage"] = "The category was successfully updated!";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -210,11 +243,13 @@ namespace TKDprogress.Areas.Admin.Controllers
                 }
                 else
                 {
+                    TempData["StatusMessage"] = "The category was successfully deleted!";
                     return View();
                 }
             }
             catch
             {
+                TempData["ErrorMessage"] = "An error occurred while processing your request.";
                 return View();
             }
         }
