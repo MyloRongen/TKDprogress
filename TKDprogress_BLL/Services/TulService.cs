@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,14 +19,14 @@ namespace TKDprogress_BLL.Services
             _tulRepository = tulRepository;
         }
 
-        public async Task<List<TulDto>> GetTulsAsync(string searchString)
+        public async Task<List<Tul>> GetTulsAsync(string searchString)
         {
-            List<TulDto> tuls = await _tulRepository.GetTulsAsync(searchString);
+            List<Tul> tuls = await _tulRepository.GetTulsAsync(searchString);
 
             return tuls;
         }
 
-        public async Task<TulDto> CreateTulAsync(TulDto newTul)
+        public async Task<Tul> CreateTulAsync(Tul newTul)
         {
             if (string.IsNullOrEmpty(newTul.Name) || string.IsNullOrEmpty(newTul.Description))
             {
@@ -33,12 +34,12 @@ namespace TKDprogress_BLL.Services
                 return newTul;
             }
 
-            TulDto tul =  await _tulRepository.CreateTulAsync(newTul);
+            Tul tul =  await _tulRepository.CreateTulAsync(newTul);
 
             return tul;
         }
 
-        public async Task<TulDto> UpdateTulAsync(TulDto newTul)
+        public async Task<Tul> UpdateTulAsync(Tul newTul)
         {
             if (newTul.Id <= 0)
             {
@@ -52,12 +53,12 @@ namespace TKDprogress_BLL.Services
                 return newTul;
             }
 
-            TulDto tul = await _tulRepository.UpdateTulAsync(newTul);
+            Tul tul = await _tulRepository.UpdateTulAsync(newTul);
 
             return tul;
         }
 
-        public async Task<TulDto> DeleteTulAsync(TulDto tul)
+        public async Task<Tul> DeleteTulAsync(Tul tul)
         {
             if (tul.Id <= 0)
             {

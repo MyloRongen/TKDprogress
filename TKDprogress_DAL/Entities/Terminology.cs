@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Enums;
+using TKDprogress_BLL.Enums;
 
 namespace TKDprogress_DAL.Entities
 {

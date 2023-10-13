@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -13,9 +13,9 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<TerminologyDto>> GetTerminologiesAsync(string searchString)
+        public async Task<List<Terminology>> GetTerminologiesAsync(string searchString)
         {
-            List<TerminologyDto> terminologies = new();
+            List<Terminology> terminologies = new();
 
             try
             {
@@ -33,13 +33,13 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    TerminologyDto terminology = new()
+                    Terminology terminology = new()
                     {
                         Id = reader.GetInt32("Id"),
                         Word = reader.GetString("Word"),
                         Meaning = reader.GetString("Meaning"),
                         CategoryId = reader.GetInt32("CategoryId"),
-                        Category = new CategoryDto
+                        Category = new Category
                         {
                             Id = reader.GetInt32("CategoryId"),
                             Name = reader.GetString("Name"),
@@ -54,16 +54,16 @@ namespace TKDprogress_DAL.Repositories
             {
                 terminologies = new()
                 {
-                    new TerminologyDto { ErrorMessage = "De terminologies could not be loaded." }
+                    new Terminology { ErrorMessage = "De terminologies could not be loaded." }
                 };
             }
 
             return terminologies;
         }
 
-        public async Task<TerminologyDto> GetTerminologyByIdAsync(int id)
+        public async Task<Terminology> GetTerminologyByIdAsync(int id)
         {
-            TerminologyDto? terminology = new();
+            Terminology? terminology = new();
 
             try
             {
@@ -79,13 +79,13 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    terminology = new TerminologyDto
+                    terminology = new Terminology
                     {
                         Id = reader.GetInt32("Id"),
                         Word = reader.GetString("Word"),
                         Meaning = reader.GetString("Meaning"),
                         CategoryId = reader.GetInt32("CategoryId"),
-                        Category = new CategoryDto
+                        Category = new Category
                         {
                             Id = reader.GetInt32("CategoryId"),
                             Name = reader.GetString("Name"),
@@ -103,7 +103,7 @@ namespace TKDprogress_DAL.Repositories
         }
 
 
-        public async Task<TerminologyDto> CreateTerminologyAsync(TerminologyDto terminology)
+        public async Task<Terminology> CreateTerminologyAsync(Terminology terminology)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace TKDprogress_DAL.Repositories
             return terminology;
         }
 
-        public async Task<TerminologyDto> DeleteTerminologyAsync(TerminologyDto terminology)
+        public async Task<Terminology> DeleteTerminologyAsync(Terminology terminology)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace TKDprogress_DAL.Repositories
             return terminology;
         }
 
-        public async Task<TerminologyDto> UpdateTerminologyAsync(TerminologyDto newTerminology)
+        public async Task<Terminology> UpdateTerminologyAsync(Terminology newTerminology)
         {
             try
             {

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,20 +19,20 @@ namespace TKDprogress_BLL.Services
             _userTulRepository = userTulRepository;
         }
 
-        public async Task<List<UserTulDto>> GetTulsAssignedToUserAsync(string? userId, string searchString)
+        public async Task<List<UserTul>> GetTulsAssignedToUserAsync(string? userId, string searchString)
         {
-            List<UserTulDto> assignedtuls = await _userTulRepository
+            List<UserTul> assignedtuls = await _userTulRepository
                 .GetTulsAssignedToUserAsync(userId, searchString);
 
             return assignedtuls;
         }
 
-        public async Task<UserTulDto> GetUserTul(int tulId, string userId)
+        public async Task<UserTul> GetUserTul(int tulId, string userId)
         {
             return await _userTulRepository.GetUserTul(tulId, userId);
         }
 
-        public async Task<UserTulDto> UpdateUserTulStatus(UserTulDto userTul)
+        public async Task<UserTul> UpdateUserTulStatus(UserTul userTul)
         {
             return await _userTulRepository.UpdateUserTulStatus(userTul);
         }

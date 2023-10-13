@@ -12,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TKDprogress_SL\TKDprogress_SL.csproj" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\TKDprogress_BLL\TKDprogress_BLL.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -14,9 +13,9 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<MovementDto>> GetMovementsAsync(string searchString)
+        public async Task<List<Movement>> GetMovementsAsync(string searchString)
         {
-            List<MovementDto> movements = new();
+            List<Movement> movements = new();
 
             try
             {
@@ -34,7 +33,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    MovementDto movement = new()
+                    Movement movement = new()
                     {
                         Id = reader.GetInt32("Id"),
                         Name = reader.GetString("Name"),
@@ -48,16 +47,16 @@ namespace TKDprogress_DAL.Repositories
             {
                 movements = new()
                 {
-                    new MovementDto { ErrorMessage = "De movements could not be loaded." }
+                    new Movement { ErrorMessage = "De movements could not be loaded." }
                 };
             }
 
             return movements;
         }
 
-        public async Task<MovementDto> GetMovementByIdAsync(int id)
+        public async Task<Movement> GetMovementByIdAsync(int id)
         {
-            MovementDto? movement = new();
+            Movement? movement = new();
 
             try
             {
@@ -72,7 +71,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    movement = new MovementDto
+                    movement = new Movement
                     {
                         Id = reader.GetInt32("Id"),
                         Name = reader.GetString("Name"),
@@ -88,7 +87,7 @@ namespace TKDprogress_DAL.Repositories
             return movement;
         }
 
-        public async Task<MovementDto> CreateMovementAsync(MovementDto movement)
+        public async Task<Movement> CreateMovementAsync(Movement movement)
         {
             try
             {
@@ -107,7 +106,7 @@ namespace TKDprogress_DAL.Repositories
             return movement;
         }
 
-        public async Task<MovementDto> DeleteMovementAsync(MovementDto movement)
+        public async Task<Movement> DeleteMovementAsync(Movement movement)
         {
             try
             {
@@ -123,7 +122,7 @@ namespace TKDprogress_DAL.Repositories
             return movement;           
         }
 
-        public async Task<MovementDto> UpdateMovementAsync(MovementDto newMovement)
+        public async Task<Movement> UpdateMovementAsync(Movement newMovement)
         {
             try
             {

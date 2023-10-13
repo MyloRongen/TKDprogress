@@ -1,6 +1,6 @@
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Services;
-using TKDprogress_SL.Entities;
 using TKDprogress_UnitTest.DummyRepositories;
 
 namespace TKDprogress_UnitTest
@@ -19,11 +19,11 @@ namespace TKDprogress_UnitTest
 
         private void InitializeCategoryItems()
         {
-            List<CategoryDto> categories = new()
+            List<Category> categories = new()
             {
-                new CategoryDto { Id = 1, Name = "Junshin", Description = "Dit is een tul", Terminologies = new List<TerminologyDto>()},
-                new CategoryDto { Id = 2, Name = "Him Ui Wolli", Description = "Dit is een tul", Terminologies = new List<TerminologyDto>()},
-                new CategoryDto { Id = 3, Name = "Commando’s", Description = "Dit is een tul", Terminologies = new List<TerminologyDto>()},
+                new Category { Id = 1, Name = "Junshin", Description = "Dit is een tul", Terminologies = new List<Terminology>()},
+                new Category { Id = 2, Name = "Him Ui Wolli", Description = "Dit is een tul", Terminologies = new List<Terminology>()},
+                new Category { Id = 3, Name = "Commando’s", Description = "Dit is een tul", Terminologies = new List<Terminology>()},
             };
 
             _categoryTestRepository.InitializeCategories(categories);
@@ -36,7 +36,7 @@ namespace TKDprogress_UnitTest
             InitializeCategoryItems();
 
             // Act
-            List<CategoryDto> categories = await _categoryService.GetCategoriesAsync("");
+            List<Category> categories = await _categoryService.GetCategoriesAsync("");
 
             // Assert
             Assert.That(categories, Has.Count.EqualTo(3));
@@ -49,7 +49,7 @@ namespace TKDprogress_UnitTest
             InitializeCategoryItems();
 
             // Act
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(3);
+            Category category = await _categoryService.GetCategoryByIdAsync(3);
 
             // Assert
             Assert.That(category.Id, Is.EqualTo(3));
@@ -61,20 +61,20 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeCategoryItems();
 
-            CategoryDto category = new()
+            Category category = new()
             {
                 Id = 4,
                 Name = "CHOONG-MOO",
                 Description = "Dit is een tul",
-                Terminologies = new List<TerminologyDto>(),
+                Terminologies = new List<Terminology>(),
             };
 
             // Act
             await _categoryService.CreateCategoryAsync(category);
-            CategoryDto categoryDto = await _categoryService.GetCategoryByIdAsync(4);
+            Category newCategory = await _categoryService.GetCategoryByIdAsync(4);
 
             // Assert
-            Assert.That(categoryDto.Id, Is.EqualTo(4));
+            Assert.That(newCategory.Id, Is.EqualTo(4));
         }
 
         [Test]
@@ -83,21 +83,21 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeCategoryItems();
 
-            CategoryDto newcategory = new()
+            Category newcategory = new()
             {
                 Id = 1,
                 Name = "CHOONG-MOO",
                 Description = "Dit is een tul",
-                Terminologies = new List<TerminologyDto>(),
+                Terminologies = new List<Terminology>(),
             };
 
             // Act
             await _categoryService.UpdateCategoryAsync(newcategory);
 
-            CategoryDto categoryDto = await _categoryService.GetCategoryByIdAsync(1);
+            Category category = await _categoryService.GetCategoryByIdAsync(1);
 
             // Assert
-            Assert.That(categoryDto, Is.EqualTo(newcategory));
+            Assert.That(category, Is.EqualTo(newcategory));
         }
 
         [Test]
@@ -106,20 +106,20 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeCategoryItems();
 
-            CategoryDto category = new()
+            Category category = new()
             {
                 Id = 1,
                 Name = "Junshin",
                 Description = "Dit is een tul",
-                Terminologies = new List<TerminologyDto>(),
+                Terminologies = new List<Terminology>(),
             };
 
             // Act
             await _categoryService.DeleteCategoryAsync(category);
-            CategoryDto categoryDto = await _categoryService.GetCategoryByIdAsync(1);
+            Category deletedCategory = await _categoryService.GetCategoryByIdAsync(1);
 
             // Assert
-            Assert.That(categoryDto.Id, Is.EqualTo(0));
+            Assert.That(deletedCategory.Id, Is.EqualTo(0));
         }
     }
 }

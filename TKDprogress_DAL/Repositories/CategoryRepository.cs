@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Models;
 using TKDprogress_DAL.Data;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -15,9 +14,9 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<CategoryDto>> GetCategoriesAsync(string searchString)
+        public async Task<List<Category>> GetCategoriesAsync(string searchString)
         {
-            List<CategoryDto> categories = new();
+            List<Category> categories = new();
 
             try
             {
@@ -35,7 +34,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    CategoryDto category = new()
+                    Category category = new()
                     {
                         Id = reader.GetInt32("Id"),
                         Name = reader.GetString("Name"),
@@ -49,16 +48,16 @@ namespace TKDprogress_DAL.Repositories
             {
                 categories = new()
                 {
-                    new CategoryDto { ErrorMessage = "De categories could not be loaded." }
+                    new Category { ErrorMessage = "De categories could not be loaded." }
                 };
             }
 
             return categories;
         }
 
-        public async Task<CategoryDto> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            CategoryDto? category = new();
+            Category? category = new();
 
             try
             {
@@ -73,7 +72,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    category = new CategoryDto
+                    category = new Category
                     {
                         Id = reader.GetInt32("Id"),
                         Name = reader.GetString("Name"),
@@ -90,7 +89,7 @@ namespace TKDprogress_DAL.Repositories
         }
 
 
-        public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category)
+        public async Task<Category> CreateCategoryAsync(Category category)
         {
             try
             {
@@ -109,7 +108,7 @@ namespace TKDprogress_DAL.Repositories
             return category;
         }
 
-        public async Task<CategoryDto> DeleteCategoryAsync(CategoryDto category)
+        public async Task<Category> DeleteCategoryAsync(Category category)
         {
             try
             {
@@ -124,7 +123,7 @@ namespace TKDprogress_DAL.Repositories
             return category;
         }
 
-        public async Task<CategoryDto> UpdateCategoryAsync(CategoryDto newCategory)
+        public async Task<Category> UpdateCategoryAsync(Category newCategory)
         {
             try
             {

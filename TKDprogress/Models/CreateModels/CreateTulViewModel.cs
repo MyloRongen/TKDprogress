@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TKDprogress_SL.Entities;
+using TKDprogress_BLL.Models;
 
 namespace TKDprogress.Models.CreateModels
 {
@@ -13,6 +13,6 @@ namespace TKDprogress.Models.CreateModels
         [MaxLength(255, ErrorMessage = "Description cannot exceed 255 characters.")]
         public string Description { get; set; }
 
-        public List<MovementDto>? Movements { get; set; }
+        public List<Movement>? Movements { get; set; }
     }
 }

@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TKDprogress.Models;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
 
 namespace TKDprogress.Controllers
 {
@@ -27,7 +27,7 @@ namespace TKDprogress.Controllers
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            List<UserCategoryDto> categories = await _userCategoryService.GetCategoriesAssignedToUserAsync(userId, searchString);
+            List<UserCategory> categories = await _userCategoryService.GetCategoriesAssignedToUserAsync(userId, searchString);
 
             List<UserCategoryViewModel> categoryViewModels = categories.Select(category => new UserCategoryViewModel
             {
@@ -42,10 +42,10 @@ namespace TKDprogress.Controllers
 
         public async Task<ActionResult> Details(int categoryId)
         {
-            CategoryDto category = await _categoryTerminologyService.GetTerminologiesAssignedToCategoryAsync(categoryId);
+            Category category = await _categoryTerminologyService.GetTerminologiesAssignedToCategoryAsync(categoryId);
 
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserCategoryDto userCategory = await _userCategoryService.GetUserCategory(categoryId, userId);
+            UserCategory userCategory = await _userCategoryService.GetUserCategory(categoryId, userId);
 
             if (category != null)
             {
@@ -76,7 +76,7 @@ namespace TKDprogress.Controllers
         public async Task<ActionResult> UpdateUserCategoryStatus(int id, EnumStatus newStatus)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserCategoryDto userCategory = await _userCategoryService.GetUserCategory(id, userId);
+            UserCategory userCategory = await _userCategoryService.GetUserCategory(id, userId);
 
             if (userCategory != null)
             {

@@ -1,4 +1,4 @@
-﻿using TKDprogress_SL.Enums;
+﻿using TKDprogress_BLL.Enums;
 
 namespace TKDprogress.Models
 {

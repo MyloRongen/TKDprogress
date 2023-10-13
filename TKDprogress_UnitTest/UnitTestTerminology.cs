@@ -1,6 +1,6 @@
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Services;
-using TKDprogress_SL.Entities;
 using TKDprogress_UnitTest.DummyRepositories;
 
 namespace TKDprogress_UnitTest
@@ -19,11 +19,11 @@ namespace TKDprogress_UnitTest
 
         private void InitializeTerminologyItems()
         {
-            List<TerminologyDto> terminologies = new()
+            List<Terminology> terminologies = new()
             {
-                new TerminologyDto { Id = 1, Word = "Ye Ui", Meaning = "Hoffelijk", CategoryId = 1 },
-                new TerminologyDto { Id = 2, Word = "Ap", Meaning = "Voorwaards", CategoryId = 1 }, 
-                new TerminologyDto { Id = 3, Word = "Yop", Meaning = "Zijwaarts", CategoryId = 1 },
+                new Terminology { Id = 1, Word = "Ye Ui", Meaning = "Hoffelijk", CategoryId = 1 },
+                new Terminology { Id = 2, Word = "Ap", Meaning = "Voorwaards", CategoryId = 1 }, 
+                new Terminology { Id = 3, Word = "Yop", Meaning = "Zijwaarts", CategoryId = 1 },
             };
 
             _terminologyTestRepository.InitializeTerminologies(terminologies);
@@ -36,7 +36,7 @@ namespace TKDprogress_UnitTest
             InitializeTerminologyItems();
 
             // Act
-            List<TerminologyDto> terminologies = await _terminologyService.GetTerminologiesAsync("");
+            List<Terminology> terminologies = await _terminologyService.GetTerminologiesAsync("");
 
             // Assert
             Assert.That(terminologies, Has.Count.EqualTo(3));
@@ -49,7 +49,7 @@ namespace TKDprogress_UnitTest
             InitializeTerminologyItems();
 
             // Act
-            TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(3);
+            Terminology terminology = await _terminologyService.GetTerminologyByIdAsync(3);
 
             // Assert
             Assert.That(terminology.Id, Is.EqualTo(3));
@@ -61,7 +61,7 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeTerminologyItems();
 
-            TerminologyDto terminology = new()
+            Terminology terminology = new()
             {
                 Id = 4,
                 Word = "Ye Ui",
@@ -71,10 +71,10 @@ namespace TKDprogress_UnitTest
 
             // Act
             await _terminologyService.CreateTerminologyAsync(terminology);
-            TerminologyDto terminologyDto = await _terminologyService.GetTerminologyByIdAsync(4);
+            Terminology newTerminology = await _terminologyService.GetTerminologyByIdAsync(4);
 
             // Assert
-            Assert.That(terminologyDto.Id, Is.EqualTo(4));
+            Assert.That(newTerminology.Id, Is.EqualTo(4));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeTerminologyItems();
 
-            TerminologyDto newterminology = new()
+            Terminology newterminology = new()
             {
                 Id = 1,
                 Word = "Yom Chi",
@@ -94,10 +94,10 @@ namespace TKDprogress_UnitTest
             // Act
             await _terminologyService.UpdateTerminologyAsync(newterminology);
 
-            TerminologyDto terminologyDto = await _terminologyService.GetTerminologyByIdAsync(1);
+            Terminology newTerminology = await _terminologyService.GetTerminologyByIdAsync(1);
 
             // Assert
-            Assert.That(terminologyDto, Is.EqualTo(newterminology));
+            Assert.That(newTerminology, Is.EqualTo(newterminology));
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeTerminologyItems();
 
-            TerminologyDto terminology = new()
+            Terminology terminology = new()
             {
                 Id = 1,
                 Word = "Ye Ui",
@@ -116,10 +116,10 @@ namespace TKDprogress_UnitTest
 
             // Act
             await _terminologyService.DeleteTerminologyAsync(terminology);
-            TerminologyDto terminologyDto = await _terminologyService.GetTerminologyByIdAsync(1);
+            Terminology newTerminology = await _terminologyService.GetTerminologyByIdAsync(1);
 
             // Assert
-            Assert.That(terminologyDto.Id, Is.EqualTo(0));
+            Assert.That(newTerminology.Id, Is.EqualTo(0));
         }
     }
 }

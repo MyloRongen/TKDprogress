@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -15,9 +14,9 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<UserTulDto>> GetTulsAssignedToUserAsync(string? userId, string searchString)
+        public async Task<List<UserTul>> GetTulsAssignedToUserAsync(string? userId, string searchString)
         {
-            List<UserTulDto> userTuls = new();
+            List<UserTul> userTuls = new();
 
             using MySqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
@@ -39,10 +38,10 @@ namespace TKDprogress_DAL.Repositories
             using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                UserTulDto userCategory = new()
+                UserTul userCategory = new()
                 {
                     TulId = reader.GetInt32("TulId"),
-                    Tul = new TulDto
+                    Tul = new Tul
                     {
                         Id = reader.GetInt32("TulId"),
                         Name = reader.GetString("TulName"),
@@ -58,9 +57,9 @@ namespace TKDprogress_DAL.Repositories
             return userTuls;
         }
 
-        public async Task<UserTulDto> GetUserTul(int tulId, string userId)
+        public async Task<UserTul> GetUserTul(int tulId, string userId)
         {
-            UserTulDto? userTul = null;
+            UserTul? userTul = null;
 
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
@@ -75,7 +74,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    userTul = new UserTulDto
+                    userTul = new UserTul
                     {
                         UserId = userId,
                         TulId = tulId,
@@ -87,7 +86,7 @@ namespace TKDprogress_DAL.Repositories
             return userTul;
         }
 
-        public async Task<UserTulDto> UpdateUserTulStatus(UserTulDto userTul)
+        public async Task<UserTul> UpdateUserTulStatus(UserTul userTul)
         {
             string query = "UPDATE UserTuls SET Status = @Status WHERE UserId = @UserId AND TulId = @TulId";
             await ExecuteNonQueryAsync(query, command =>

@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -19,11 +20,11 @@ namespace TKDprogress_BLL.Services
             _tulMovementRepository = tulMovementRepository;
         }
 
-        public async Task AttachMovementsToTulAsync(TulDto tul, List<TulMovementDto> tulMovements)
+        public async Task AttachMovementsToTulAsync(Tul tul, List<TulMovement> tulMovements)
         {
             if (tulMovements != null)
             {
-                foreach (TulMovementDto tulMovement in tulMovements)
+                foreach (TulMovement tulMovement in tulMovements)
                 {
                     tulMovement.TulId = tul.Id;
                 }
@@ -32,18 +33,18 @@ namespace TKDprogress_BLL.Services
             await _tulMovementRepository.AttachMovementsToTulAsync(tulMovements);
         }
 
-        public async Task<TulDto> GetTulWithMovementByIdAsync(int tulId)
+        public async Task<Tul> GetTulWithMovementByIdAsync(int tulId)
         {
             if (tulId <= 0)
             {
-                return new TulDto { ErrorMessage = "Invalid tul." };
+                return new Tul { ErrorMessage = "Invalid tul." };
             }
 
-            TulDto tul = await _tulMovementRepository.GetTulWithMovementByIdAsync(tulId);
+            Tul tul = await _tulMovementRepository.GetTulWithMovementByIdAsync(tulId);
 
             if (tul.Id <= 0)
             {
-                return new TulDto { ErrorMessage = "Tul not found." };
+                return new Tul { ErrorMessage = "Tul not found." };
             }
 
             return tul;

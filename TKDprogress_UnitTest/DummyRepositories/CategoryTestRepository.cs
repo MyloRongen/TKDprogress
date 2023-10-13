@@ -4,28 +4,28 @@ using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Models;
 
 namespace TKDprogress_UnitTest.DummyRepositories
 {
     public class CategoryTestRepository : ICategoryRepository
     {
-        private List<CategoryDto> categories;
+        private List<Category> categories;
 
-        public void InitializeCategories(List<CategoryDto> newCategories)
+        public void InitializeCategories(List<Category> newCategories)
         {
             categories = newCategories;
         }
 
-        public async Task<List<CategoryDto>> GetCategoriesAsync(string searchString)
+        public async Task<List<Category>> GetCategoriesAsync(string searchString)
         {
             return categories;
         }
 
-        public async Task<CategoryDto> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
-            CategoryDto category = new();
+            Category category = new();
 
             foreach (var item in categories)
             {
@@ -40,7 +40,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
         }
 
 
-        public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category)
+        public async Task<Category> CreateCategoryAsync(Category category)
         {
             foreach (var item in categories)
             {
@@ -54,7 +54,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return category;
         }
 
-        public async Task<CategoryDto> DeleteCategoryAsync(CategoryDto category)
+        public async Task<Category> DeleteCategoryAsync(Category category)
         {
             foreach (var item in categories)
             {
@@ -68,7 +68,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return category;
         }
 
-        public async Task<CategoryDto> UpdateCategoryAsync(CategoryDto newCategory)
+        public async Task<Category> UpdateCategoryAsync(Category newCategory)
         {
             for (int i = 0; i < categories.Count; i++)
             {

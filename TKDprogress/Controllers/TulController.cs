@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TKDprogress.Models;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
 
 namespace TKDprogress.Controllers
 {
@@ -24,7 +25,7 @@ namespace TKDprogress.Controllers
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            List<UserTulDto> userTuls = await _userTulService.GetTulsAssignedToUserAsync(userId, searchString);
+            List<UserTul> userTuls = await _userTulService.GetTulsAssignedToUserAsync(userId, searchString);
 
             List<UserTulViewModel> userTulViewModels = userTuls.Select(userTul => new UserTulViewModel
             {
@@ -39,10 +40,10 @@ namespace TKDprogress.Controllers
 
         public async Task<ActionResult> Details(int tulId)
         {
-            TulDto tul = await _tulMovementService.GetTulWithMovementByIdAsync(tulId);
+            Tul tul = await _tulMovementService.GetTulWithMovementByIdAsync(tulId);
 
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserTulDto userTul = await _userTulService.GetUserTul(tulId, userId);
+            UserTul userTul = await _userTulService.GetUserTul(tulId, userId);
 
             if (tul != null)
             {
@@ -52,7 +53,7 @@ namespace TKDprogress.Controllers
                     Name = tul.Name,
                     Description = tul.Description,
                     Status = userTul?.Status,
-                    Movements = tul.Movements.Select(movement => new MovementDto
+                    Movements = tul.Movements.Select(movement => new Movement
                     {
                         Id = movement.Id,
                         Name = movement.Name,
@@ -73,7 +74,7 @@ namespace TKDprogress.Controllers
         public async Task<ActionResult> UpdateUserTulStatus(int id, EnumStatus newStatus)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserTulDto userTul = await _userTulService.GetUserTul(id, userId);
+            UserTul userTul = await _userTulService.GetUserTul(id, userId);
 
             if (userTul != null)
             {

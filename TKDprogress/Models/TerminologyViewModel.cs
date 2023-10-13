@@ -1,7 +1,4 @@
-﻿using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
-
-namespace TKDprogress.Models
+﻿namespace TKDprogress.Models
 {
     public class TerminologyViewModel
     {

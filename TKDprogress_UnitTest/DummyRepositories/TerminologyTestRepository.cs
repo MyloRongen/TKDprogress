@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Models;
 
 namespace TKDprogress_UnitTest.DummyRepositories
 {
     public class TerminologyTestRepository : ITerminologyRepository
     {
-        private List<TerminologyDto> terminologies;
+        private List<Terminology> terminologies;
 
-        public void InitializeTerminologies(List<TerminologyDto> newTerminologies)
+        public void InitializeTerminologies(List<Terminology> newTerminologies)
         {
             terminologies = newTerminologies;
         }
 
-        public async Task<List<TerminologyDto>> GetTerminologiesAsync(string searchString)
+        public async Task<List<Terminology>> GetTerminologiesAsync(string searchString)
         {
             return terminologies;
         }
 
-        public async Task<TerminologyDto> GetTerminologyByIdAsync(int id)
+        public async Task<Terminology> GetTerminologyByIdAsync(int id)
         {
-            TerminologyDto terminology = new();
+            Terminology terminology = new();
 
             foreach (var item in terminologies)
             {
@@ -38,7 +38,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return terminology;
         }
 
-        public async Task<TerminologyDto> CreateTerminologyAsync(TerminologyDto terminology)
+        public async Task<Terminology> CreateTerminologyAsync(Terminology terminology)
         {
             foreach (var item in terminologies)
             {
@@ -52,7 +52,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return terminology;
         }
 
-        public async Task<TerminologyDto> DeleteTerminologyAsync(TerminologyDto terminology)
+        public async Task<Terminology> DeleteTerminologyAsync(Terminology terminology)
         {
             foreach (var item in terminologies)
             {
@@ -66,7 +66,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return terminology;
         }
 
-        public async Task<TerminologyDto> UpdateTerminologyAsync(TerminologyDto newTerminology)
+        public async Task<Terminology> UpdateTerminologyAsync(Terminology newTerminology)
         {
             for (int i = 0; i < terminologies.Count; i++)
             {

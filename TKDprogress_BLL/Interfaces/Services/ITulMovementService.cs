@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
+using TKDprogress_BLL.Models;
 
-namespace TKDprogress_BLL.Interfaces
+namespace TKDprogress_BLL.Interfaces.Services
 {
     public interface ITulMovementService
     {
-        Task AttachMovementsToTulAsync(TulDto tul, List<TulMovementDto> tulMovements);
-        Task<TulDto> GetTulWithMovementByIdAsync(int tulId);
+        Task AttachMovementsToTulAsync(Tul tul, List<TulMovement> tulMovements);
+        Task<Tul> GetTulWithMovementByIdAsync(int tulId);
         Task DeleteTulMovementsAsync(int tulId);
     }
 }

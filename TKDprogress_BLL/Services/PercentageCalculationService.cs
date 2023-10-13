@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
     public class PercentageCalculationService : IPercentageCalculationService
     {
-        public Task<(float unlearnedPercentage, float inProgressPercentage, float learnedPercentage)> CalculateTulPercentagesAsync(List<UserTulDto> allStatuses)
+        public Task<(float unlearnedPercentage, float inProgressPercentage, float learnedPercentage)> CalculateTulPercentagesAsync(List<UserTul> allStatuses)
         {
             int unlearnedCount = allStatuses.Count(status => status.Status == EnumStatus.unlearned);
             int inProgressCount = allStatuses.Count(status => status.Status == EnumStatus.inProgress);
@@ -26,7 +27,7 @@ namespace TKDprogress_BLL.Services
             return Task.FromResult((unlearnedPercentage, inProgressPercentage, learnedPercentage));
         }
 
-        public Task<(float unlearnedPercentage, float inProgressPercentage, float learnedPercentage)> CalculateCategoryPercentagesAsync(List<UserCategoryDto> allStatuses)
+        public Task<(float unlearnedPercentage, float inProgressPercentage, float learnedPercentage)> CalculateCategoryPercentagesAsync(List<UserCategory> allStatuses)
         {
             int unlearnedCount = allStatuses.Count(status => status.Status == EnumStatus.unlearned);
             int inProgressCount = allStatuses.Count(status => status.Status == EnumStatus.inProgress);

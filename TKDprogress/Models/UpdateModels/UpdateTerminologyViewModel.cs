@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TKDprogress_SL.Enums;
 
 namespace TKDprogress.Models.UpdateModels
 {

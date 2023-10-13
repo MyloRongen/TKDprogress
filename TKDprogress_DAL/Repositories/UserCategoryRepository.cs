@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -14,9 +14,9 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<UserCategoryDto>> GetCategoriesAssignedToUserAsync(string? userId, string searchString)
+        public async Task<List<UserCategory>> GetCategoriesAssignedToUserAsync(string? userId, string searchString)
         {
-            List<UserCategoryDto> userCategories = new();
+            List<UserCategory> userCategories = new();
 
             using MySqlConnection connection = new(_connectionString);
             await connection.OpenAsync();
@@ -38,10 +38,10 @@ namespace TKDprogress_DAL.Repositories
             using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                UserCategoryDto userCategory = new()
+                UserCategory userCategory = new()
                 {
                     CategoryId = reader.GetInt32("CategoryId"),
-                    Category = new CategoryDto
+                    Category = new Category
                     {
                         Id = reader.GetInt32("CategoryId"),
                         Name = reader.GetString("CategoryName"),
@@ -57,9 +57,9 @@ namespace TKDprogress_DAL.Repositories
             return userCategories;
         }
 
-        public async Task<UserCategoryDto> GetUserCategory(int categoryId, string userId)
+        public async Task<UserCategory> GetUserCategory(int categoryId, string userId)
         {
-            UserCategoryDto? userCategory = null;
+            UserCategory? userCategory = null;
 
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
@@ -74,7 +74,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    userCategory = new UserCategoryDto
+                    userCategory = new UserCategory
                     {
                         UserId = userId,
                         CategoryId = categoryId, 
@@ -86,7 +86,7 @@ namespace TKDprogress_DAL.Repositories
             return userCategory;
         }
 
-        public async Task<UserCategoryDto> UpdateUserCategoryStatus(UserCategoryDto userCategory)
+        public async Task<UserCategory> UpdateUserCategoryStatus(UserCategory userCategory)
         {
             string query = "UPDATE UserCategories SET Status = @Status WHERE UserId = @UserId AND CategoryId = @CategoryId";
             await ExecuteNonQueryAsync(query, command =>

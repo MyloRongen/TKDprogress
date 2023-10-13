@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_BLL.Enums;
 
 namespace TKDprogress_BLL.Models
 {
@@ -15,5 +14,7 @@ namespace TKDprogress_BLL.Models
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

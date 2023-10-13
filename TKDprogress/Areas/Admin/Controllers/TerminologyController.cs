@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using TKDprogress.Models;
 using TKDprogress.Models.CreateModels;
 using TKDprogress.Models.UpdateModels;
-using TKDprogress_BLL.Interfaces;
 using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Areas.Admin.Controllers
 {
@@ -27,11 +26,11 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Index(string searchString)
         {
-            List<TerminologyDto> terminologies = await _terminologyService.GetTerminologiesAsync(searchString);
+            List<Terminology> terminologies = await _terminologyService.GetTerminologiesAsync(searchString);
 
             if (terminologies.Any(t => t.ErrorMessage != null))
             {
-                foreach (TerminologyDto terminology in terminologies)
+                foreach (Terminology terminology in terminologies)
                 {
                     if (terminology.ErrorMessage != null)
                     {
@@ -55,7 +54,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
+            Terminology terminology = await _terminologyService.GetTerminologyByIdAsync(id);
 
             if (terminology.ErrorMessage == null)
             {
@@ -76,7 +75,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Create()
         {
-            List<CategoryDto> categories = await _categoryService.GetCategoriesAsync("");
+            List<Category> categories = await _categoryService.GetCategoriesAsync("");
 
             List<CategoryViewModel> categoryViewModels = categories.Select(category => new CategoryViewModel
             {
@@ -102,7 +101,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(terminologyViewModel);
             }
 
-            TerminologyDto terminology = new()
+            Terminology terminology = new()
             {
                 Word = terminologyViewModel.Word,
                 Meaning = terminologyViewModel.Meaning,
@@ -123,8 +122,8 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
-            List<CategoryDto> categories = await _categoryService.GetCategoriesAsync("");
+            Terminology terminology = await _terminologyService.GetTerminologyByIdAsync(id);
+            List<Category> categories = await _categoryService.GetCategoriesAsync("");
 
             List<CategoryViewModel> categorieViewModels = categories.Select(category => new CategoryViewModel
             {
@@ -154,7 +153,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(terminologyViewModel);
             }
 
-            TerminologyDto terminology = new()
+            Terminology terminology = new()
             {
                 Id = terminologyViewModel.Id,
                 Word = terminologyViewModel.Word,
@@ -176,7 +175,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Delete(int id)
         {
-            TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
+            Terminology terminology = await _terminologyService.GetTerminologyByIdAsync(id);
 
             TerminologyViewModel terminologyViewModel = new()
             {
@@ -195,7 +194,7 @@ namespace TKDprogress.Areas.Admin.Controllers
         {
             try
             {
-                TerminologyDto terminology = await _terminologyService.GetTerminologyByIdAsync(id);
+                Terminology terminology = await _terminologyService.GetTerminologyByIdAsync(id);
                 await _terminologyService.DeleteTerminologyAsync(terminology);
 
                 TempData["StatusMessage"] = "The terminology was successfully deleted!";
@@ -208,7 +207,7 @@ namespace TKDprogress.Areas.Admin.Controllers
             }
         }
 
-        private static CategoryViewModel ConvertToCategoryViewModel(CategoryDto category)
+        private static CategoryViewModel ConvertToCategoryViewModel(Category category)
         {
             if (category == null)
             {

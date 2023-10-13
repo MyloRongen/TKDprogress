@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,31 +19,31 @@ namespace TKDprogress_BLL.Services
             _terminologyRepository = terminologyRepository;
         }
 
-        public async Task<List<TerminologyDto>> GetTerminologiesAsync(string searchString)
+        public async Task<List<Terminology>> GetTerminologiesAsync(string searchString)
         {
-            List<TerminologyDto> terminologies = await _terminologyRepository.GetTerminologiesAsync(searchString);
+            List<Terminology> terminologies = await _terminologyRepository.GetTerminologiesAsync(searchString);
 
             return terminologies;
         }
 
-        public async Task<TerminologyDto> GetTerminologyByIdAsync(int id)
+        public async Task<Terminology> GetTerminologyByIdAsync(int id)
         {
             if (id <= 0)
             {
-                return new TerminologyDto { ErrorMessage = "Invalid terminology." };
+                return new Terminology { ErrorMessage = "Invalid terminology." };
             }
 
-            TerminologyDto terminology = await _terminologyRepository.GetTerminologyByIdAsync(id);
+            Terminology terminology = await _terminologyRepository.GetTerminologyByIdAsync(id);
 
             if (terminology.Id <= 0)
             {
-                return new TerminologyDto { ErrorMessage = "Terminology not found." };
+                return new Terminology { ErrorMessage = "Terminology not found." };
             }
 
             return terminology;
         }
 
-        public async Task<TerminologyDto> CreateTerminologyAsync(TerminologyDto terminology)
+        public async Task<Terminology> CreateTerminologyAsync(Terminology terminology)
         {
             if (terminology.CategoryId <= 0)
             {
@@ -61,7 +62,7 @@ namespace TKDprogress_BLL.Services
             return terminology;
         }
 
-        public async Task<TerminologyDto> UpdateTerminologyAsync(TerminologyDto terminology)
+        public async Task<Terminology> UpdateTerminologyAsync(Terminology terminology)
         {
             if (terminology.Id <= 0)
             {
@@ -86,7 +87,7 @@ namespace TKDprogress_BLL.Services
             return terminology;
         }
 
-        public async Task<TerminologyDto> DeleteTerminologyAsync(TerminologyDto terminology)
+        public async Task<Terminology> DeleteTerminologyAsync(Terminology terminology)
         {
             if (terminology.Id <= 0)
             {

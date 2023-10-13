@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -13,7 +13,7 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task AttachMovementsToTulAsync(List<TulMovementDto> tulMovements)
+        public async Task AttachMovementsToTulAsync(List<TulMovement> tulMovements)
         {
             using MySqlConnection connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
@@ -31,9 +31,9 @@ namespace TKDprogress_DAL.Repositories
             }
         }
 
-        public async Task<TulDto> GetTulWithMovementByIdAsync(int tulId)
+        public async Task<Tul> GetTulWithMovementByIdAsync(int tulId)
         {
-            TulDto? tulWithMovement = new();
+            Tul? tulWithMovement = new();
 
             try
             {
@@ -57,19 +57,19 @@ namespace TKDprogress_DAL.Repositories
                 {
                     if (tulWithMovement.Id == 0)
                     {
-                        tulWithMovement = new TulDto
+                        tulWithMovement = new Tul
                         {
                             Id = reader.GetInt32("Id"),
                             Name = reader.GetString("TulName"),
                             Description = reader.GetString("Description"),
-                            Movements = new List<MovementDto>()
+                            Movements = new List<Movement>()
                         };
                     }
 
                     int? movementId = reader["MovementId"] as int?;
                     if (movementId.HasValue)
                     {
-                        tulWithMovement.Movements.Add(new MovementDto
+                        tulWithMovement.Movements.Add(new Movement
                         {
                             Id = movementId.Value,
                             Name = reader.GetString("MovementName"),

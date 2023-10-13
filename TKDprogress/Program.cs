@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
 using TKDprogress_DAL.Data;
 using TKDprogress_DAL.Repositories;
-using TKDprogress_SL.Interfaces;
 
 namespace TKDprogress
 {
@@ -63,56 +64,6 @@ namespace TKDprogress
             builder.Services.AddScoped<IStatusService, StatusService>();
 
             builder.Services.AddScoped<IPercentageCalculationService, PercentageCalculationService>();
-
-
-            /*builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-
-            builder.Services.AddMvc()
-                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-                .AddDataAnnotationsLocalization();
-
-            builder.Services.Configure<RequestLocalizationOptions>(options =>
-            {
-                var supportedCultures = new[]
-                {
-                    new CultureInfo("en-US"),
-                    new CultureInfo("nl-NL"),
-                };
-
-                options.DefaultRequestCulture = new RequestCulture("en-US");
-                options.AddSupportedUICultures("en-US", "nl-NL");
-                options.FallBackToParentUICultures = true;
-
-                options.AddInitialRequestCultureProvider(new CustomRequestCultureProvider(async context =>
-                {
-                    return await Task.FromResult(new ProviderCultureResult("en"));
-                }));
-            });
-
-            builder.Services.AddRazorPages().AddViewLocalization();
-*/
-
-            /*builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
-
-            builder.Services.AddLocalization(options =>
-            {
-                options.ResourcesPath = "Resources";
-            });
-
-            builder.Services.Configure<RequestLocalizationOptions>(options =>
-            {
-                var supportedCultures = new[]
-                {
-                    new CultureInfo("en-US"),
-                    new CultureInfo("nl-NL"),
-                };
-
-                options.DefaultRequestCulture = new RequestCulture("en-US");
-                options.AddSupportedUICultures("en-US", "nl-NL");
-                options.FallBackToParentUICultures = true;
-
-                options.RequestCultureProviders.Remove((IRequestCultureProvider)typeof(AcceptLanguageHeaderRequestCultureProvider));
-            });*/
 
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
             builder.Services.AddRazorPages().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();

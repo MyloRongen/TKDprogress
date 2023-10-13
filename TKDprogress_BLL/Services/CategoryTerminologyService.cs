@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,9 +19,9 @@ namespace TKDprogress_BLL.Services
             _categoryTerminologyRepository = categoryTerminologyRepository;
         }
 
-        public async Task<CategoryDto> GetTerminologiesAssignedToCategoryAsync(int categoryId)
+        public async Task<Category> GetTerminologiesAssignedToCategoryAsync(int categoryId)
         {
-            CategoryDto categoryWithTerminologies = await _categoryTerminologyRepository
+            Category categoryWithTerminologies = await _categoryTerminologyRepository
                 .GetTerminologiesAssignedToCategoryAsync(categoryId);
 
             return categoryWithTerminologies;

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TKDprogress_SL.Entities
+namespace TKDprogress_BLL.Models
 {
-    public class MovementDto
+    public class Movement
     {
         public int Id { get; set; }
 

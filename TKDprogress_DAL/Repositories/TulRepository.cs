@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -13,9 +13,9 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<TulDto>> GetTulsAsync(string searchString)
+        public async Task<List<Tul>> GetTulsAsync(string searchString)
         {
-            List<TulDto> tuls = new();
+            List<Tul> tuls = new();
 
             try
             {
@@ -33,7 +33,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    TulDto tul = new()
+                    Tul tul = new()
                     {
                         Id = reader.GetInt32("Id"),
                         Name = reader.GetString("Name"),
@@ -47,14 +47,14 @@ namespace TKDprogress_DAL.Repositories
             {
                 tuls = new()
                 {
-                    new TulDto { ErrorMessage = "De tuls could not be loaded." }
+                    new Tul { ErrorMessage = "De tuls could not be loaded." }
                 };
             }
 
             return tuls;
         }
 
-        public async Task<TulDto> CreateTulAsync(TulDto newTul)
+        public async Task<Tul> CreateTulAsync(Tul newTul)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace TKDprogress_DAL.Repositories
             return newTul;
         }
 
-        public async Task<TulDto> DeleteTulAsync(TulDto tul)
+        public async Task<Tul> DeleteTulAsync(Tul tul)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace TKDprogress_DAL.Repositories
             return tul;
         }
 
-        public async Task<TulDto> UpdateTulAsync(TulDto newTul)
+        public async Task<Tul> UpdateTulAsync(Tul newTul)
         {
             try
             {

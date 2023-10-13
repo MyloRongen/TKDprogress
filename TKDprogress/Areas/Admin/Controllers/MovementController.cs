@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using TKDprogress.Models;
 using TKDprogress.Models.CreateModels;
 using TKDprogress.Models.UpdateModels;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Areas.Admin.Controllers
 {
@@ -27,11 +27,11 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Index(string searchString)
         {
-            List<MovementDto> movements = await _movementService.GetMovementsAsync(searchString);
+            List<Movement> movements = await _movementService.GetMovementsAsync(searchString);
 
             if (movements.Any(m => m.ErrorMessage != null))
             {
-                foreach (MovementDto movement in movements)
+                foreach (Movement movement in movements)
                 {
                     if (movement.ErrorMessage != null)
                     {
@@ -54,7 +54,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            MovementDto movement = await _movementService.GetMovementByIdAsync(id);
+            Movement movement = await _movementService.GetMovementByIdAsync(id);
 
             if (movement.ErrorMessage == null)
             {
@@ -93,7 +93,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(movementViewModel);
             }
 
-            MovementDto movement = new()
+            Movement movement = new()
             {
                 Name = movementViewModel.Name,
                 ImageUrl = movementViewModel.ImageUrl,
@@ -113,7 +113,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            MovementDto movement = await _movementService.GetMovementByIdAsync(id);
+            Movement movement = await _movementService.GetMovementByIdAsync(id);
 
             UpdateMovementViewModel movementViewModel = new()
             {
@@ -137,7 +137,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(movementViewModel);
             }
 
-            MovementDto movement = new()
+            Movement movement = new()
             {
                 Id = movementViewModel.Id,
                 Name = movementViewModel.Name,
@@ -158,7 +158,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Delete(int id)
         {
-            MovementDto movement = await _movementService.GetMovementByIdAsync(id);
+            Movement movement = await _movementService.GetMovementByIdAsync(id);
 
             MovementViewModel movementViewModel = new()
             {
@@ -176,7 +176,7 @@ namespace TKDprogress.Areas.Admin.Controllers
         {
             try
             {
-                MovementDto movement = await _movementService.GetMovementByIdAsync(id);
+                Movement movement = await _movementService.GetMovementByIdAsync(id);
                 await _movementService.DeleteMovementAsync(movement);
 
                 TempData["StatusMessage"] = "The movement was successfully deleted!";
