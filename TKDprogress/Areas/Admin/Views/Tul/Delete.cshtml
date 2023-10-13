@@ -1,0 +1,76 @@
+﻿@model TulViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="h-screen overflow-y-auto transform scroll">
+    <div class="shadow-lg">
+        <div class="flex flex-col justify-center pl-4 md:pl-20">
+            <h1 class="text-3xl py-6 font-medium">Delete tul</h1>
+        </div>
+    </div>
+    @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-green-500 w-full mb-10">
+            @TempData["StatusMessage"]
+        </div>
+    }
+
+    @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full mb-10">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="pt-10 pl-0 md:pl-20">
+
+        <div class="absolute ml-4">
+            <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Terug</a>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+        <section class="bg-white pt-16 xl:pt-0">
+            <div class="px-4 mx-auto max-w-2xl">
+                <div class="mb-4">
+                    <label class="text-3xl font-medium">
+                        @Html.DisplayFor(model => model.Name)
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-xl">
+                        @Html.DisplayFor(model => model.Description)
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <ul id="movements-list" class="border border-gray-300 rounded-lg p-2">
+                        @if (Model.Movements != null)
+                        {
+                            @foreach (var movement in Model.Movements)
+                            {
+                                <li class="bg-white border border-gray-300 p-2 mb-2 cursor-pointer flex justify-between">
+                                    @movement.Name
+                                    <div>
+                                        <input type="hidden" class="selected-movement-id" name="SelectedMovements" value="@movement.Id" />
+                                        <span class="material-symbols-outlined sort">sort</span>
+                                    </div>
+                                </li>
+                            }
+                        }      
+                    </ul>
+                </div>
+
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="w-full flex justify-end">
+                        <input type="submit" value="Delete" class="inline-block bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" />
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>

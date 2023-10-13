@@ -1,0 +1,58 @@
+﻿@model TulViewModel
+
+@{
+    ViewData["Title"] = "Movements tul";
+    Layout = "~/Views/Shared/_SideLayout.cshtml";
+}
+
+<div class="h-screen overflow-y-auto transform scroll">
+    <div class="px-2 md:px-20 pt-20">
+        <div class="flex justify-between">
+            <div class="flex flex-col justify-center">
+                <h1 class="text-3xl font-medium">@Html.DisplayFor(model => model.Name)</h1>
+            </div>
+
+            <div>
+                <form asp-action="UpdateUserTulStatus" method="post" enctype="multipart/form-data" class="flex gap-2">
+                    <input type="hidden" asp-for="Id" />
+                    <select id="tulStatus" name="newStatus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5">
+                        @foreach (var status in Enum.GetValues(typeof(EnumStatus)))
+                        {
+                            @if ((int?)Model.Status == (int)status)
+                            {
+                                <option value="@status" selected>@status</option>
+                            }
+                            else
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        }
+                    </select>
+                    <input type="submit" value="Update Status" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+                </form>
+            </div>
+        </div>
+
+        <div class="pt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:lg:grid-cols-2 xl:lg:grid-cols-3 justify-items-center">
+            @if (Model.Movements != null)
+            {
+                @foreach (var movement in Model.Movements)
+                {
+                    <div class="w-full text-white text-xl pb-10 px-2">
+                        <div class="w-full shadow p-6 gap-2 items-center hover:shadow-lg rounded-lg bg-black flex justify-center">
+                            <div>
+                                <div class="text-center">
+                                    <p class="text-white font-bold">@movement.Name</p>
+
+                                    <div class="mt-4">
+                                        <img src="@Url.Content("~/Images/" + movement.ImageUrl)" class="w-40" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

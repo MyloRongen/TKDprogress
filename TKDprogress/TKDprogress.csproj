@@ -29,4 +29,10 @@
     <ProjectReference Include="..\TKDprogress_DAL\TKDprogress_DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views\Home\Index.en-US.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

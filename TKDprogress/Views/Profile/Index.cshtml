@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_SideLayout.cshtml";
+}
+
+<div class="h-screen px-2 md:px-20 lg:px-40 pt-10 overflow-y-auto">
+    <div class="flex justify-between w-full mb-20">
+        <div class="w-full flex-1">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <h1 class="text-3xl font-medium pt-2">Profile</h1>
+                <h2 class="text-2xl font-medium pt-6">@User.Identity?.Name!</h2>
+            }
+        </div>
+        <div class="w-full flex-1 flex justify-end">
+            <img class="w-28 h-28 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfTe5Hq8GqZxZW_T-TiSRE-IqsOLTMwnBmUm0d3jjD0k2TTte4u4gJFrTyA4m8SdjqU-c&usqp=CAU" alt="user photo">
+        </div>
+    </div>
+
+    <div class="bg-black rounded-lg text-white p-8 mb-8">
+        <div>
+            <h1 class="text-xl">Update email</h1>
+            <h2 class="text-lg pt-2">Make sure you are using the right email address.</h2>
+
+            <div class="relative">
+                <div class="pt-10 w-full">
+                    <a asp-area="Identity" asp-page="/Account/Manage/Email" class="py-3 px-6 bg-[#1CADE4] hover:bg-[#47A0FF] font-medium text-center rounded-md text-black text-white text-md">Update e-mail</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-black rounded-lg text-white p-8 mb-8">
+        <div>
+            <h1 class="text-xl">Update password</h1>
+            <h2 class="text-lg pt-2">Make sure your account uses a long, random password to stay secure.</h2>
+
+            <div class="relative">
+                <div class="pt-10 w-full">
+                    <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword" class="py-3 px-6 bg-[#1CADE4] hover:bg-[#47A0FF] font-medium text-center rounded-md text-black text-white text-md">Update password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-black rounded-lg text-white p-8 mb-8">
+        <div>
+            <h1 class="text-xl">Delete account</h1>
+            <h2 class="text-lg pt-2">Once your account is deleted, all resources and data will be permanently removed. Before deleting your account, please download any data or information you wish to retain.</h2>
+
+            <div class="relative">
+                <div class="pt-10 w-full">
+                    <a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData" class="py-3 px-6 bg-red-500 hover:bg-red-700 font-medium text-center rounded-md text-black text-white text-md">Update password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

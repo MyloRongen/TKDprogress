@@ -259,7 +259,7 @@ namespace TKDprogress.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Meaning")
@@ -328,35 +328,35 @@ namespace TKDprogress.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserCategories");
                 });
 
             modelBuilder.Entity("TKDprogress_DAL.Entities.UserTul", b =>
                 {
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int>("TulId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasIndex("TulId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserTuls");
                 });
@@ -414,9 +414,13 @@ namespace TKDprogress.Migrations
 
             modelBuilder.Entity("TKDprogress_DAL.Entities.Terminology", b =>
                 {
-                    b.HasOne("TKDprogress_DAL.Entities.Category", null)
+                    b.HasOne("TKDprogress_DAL.Entities.Category", "Category")
                         .WithMany("Terminologies")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("TKDprogress_DAL.Entities.TulMovement", b =>
@@ -448,7 +452,7 @@ namespace TKDprogress.Migrations
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -467,7 +471,7 @@ namespace TKDprogress.Migrations
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,159 +1,104 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TKDprogress.Models;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
-using TKDprogress_DAL.Repositories;
-using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    [Area("Admin")]
+    [Authorize]
     public class CategoryController : Controller
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IUserCategoryService _userCategoryService;
+        private readonly ICategoryTerminologyService _categoryTerminologyService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(IUserCategoryService userCategoryService, ICategoryTerminologyService categoryTerminologyService)
         {
-            _categoryService = categoryService;
+            _userCategoryService = userCategoryService;
+            _categoryTerminologyService = categoryTerminologyService;
         }
 
-        public async Task<ActionResult> IndexAsync(string searchString)
+        public async Task<ActionResult> Index(string searchString)
         {
-/*            try
-            {*/
-                List<CategoryDto> categories = await _categoryService.GetCategoriesAsync(searchString);
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                List<CategoryViewModel> categoryViewModels = categories.Select(category => new CategoryViewModel
-                {
-                    Id = category.Id,
-                    Name = category.Name,
-                    Description = category.Description,
-                }).ToList();
+            List<UserCategory> categories = await _userCategoryService.GetCategoriesAssignedToUserAsync(userId, searchString);
 
-                return View(categoryViewModels);
-/*            }
-            catch (Exception ex)
+            List<UserCategoryViewModel> categoryViewModels = categories.Select(category => new UserCategoryViewModel
             {
-                ViewBag.ErrorMessage = "An error occurred while fetching category index.";
-                return View();
-            }*/
+                Id = category.Category.Id,
+                Name = category.Category.Name, 
+                Status = category.Status,
+                StatusText = EnumStatusToText(category.Status)
+            }).ToList();
+
+            return View(categoryViewModels);
         }
 
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int categoryId)
         {
-            try
-            {
-                CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
+            Category category = await _categoryTerminologyService.GetTerminologiesAssignedToCategoryAsync(categoryId);
 
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserCategory userCategory = await _userCategoryService.GetUserCategory(categoryId, userId);
+
+            if (category != null)
+            {
                 CategoryViewModel categoryViewModel = new()
                 {
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
+                    Status = userCategory?.Status,
+                    Terminologies = category.Terminologies.Select(terminology => new TerminologyViewModel
+                    {
+                        Id = terminology.Id,
+                        Word = terminology.Word,
+                        Meaning = terminology.Meaning,
+                    }).ToList(),
                 };
 
                 return View(categoryViewModel);
             }
-            catch (Exception ex)
+            else
             {
-                ViewBag.ErrorMessage = "An error occurred while fetching category details: " + ex.Message;
-                return View();
+                TempData["ErrorMessage"] = "Category doesn't contain terminologies!";
+                return RedirectToAction(nameof(Index));
             }
         }
 
-        public ActionResult Create()
+        [HttpPost]
+        public async Task<ActionResult> UpdateUserCategoryStatus(int id, EnumStatus newStatus)
         {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserCategory userCategory = await _userCategoryService.GetUserCategory(id, userId);
+
+            if (userCategory != null)
+            {
+                userCategory.Status = newStatus;
+                await _userCategoryService.UpdateUserCategoryStatus(userCategory);
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["ErrorMessage"] = "An error occurred while processing your request.";
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreateCategoryViewModel categoryViewModel)
+        private static string EnumStatusToText(EnumStatus status)
         {
-            if (!ModelState.IsValid)
+            return status switch
             {
-                return View(categoryViewModel);
-            }
-
-            CategoryDto category = new()
-            {
-                Name = categoryViewModel.Name,
-                Description = categoryViewModel.Description
+                EnumStatus.unlearned => "unlearned",
+                EnumStatus.inProgress => "in progress",
+                EnumStatus.learned => "learned",
+                _ => "No status",
             };
-
-            _ = await _categoryService.CreateCategoryAsync(category);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<ActionResult> Edit(int id)
-        {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
-
-            UpdateCategoryViewModel categoryViewModel = new()
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Description = category.Description,
-            };
-
-            return View(categoryViewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(UpdateCategoryViewModel categoryViewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(categoryViewModel);
-            }
-
-            CategoryDto category = new()
-            {
-                Id = categoryViewModel.Id,
-                Name = categoryViewModel.Name,
-                Description = categoryViewModel.Description,
-            };
-
-            _ = await _categoryService.UpdateCategoryAsync(category);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<ActionResult> Delete(int id)
-        {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
-
-            CategoryViewModel categoryViewModel = new()
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Description = category.Description,
-            };
-
-            return View(categoryViewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, IFormCollection collection)
-        {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
-            await _categoryService.DeleteCategoryAsync(category);
-
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                TempData["ErrorMessage"] = "An error occurred while processing your request.";
-                return View();
-            }
         }
     }
 }

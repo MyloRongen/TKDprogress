@@ -1,0 +1,74 @@
+﻿@model UpdateMovementViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="h-screen">
+    <div class="shadow-lg">
+        <div class="flex flex-col justify-center pl-4 md:pl-20">
+            <h1 class="text-3xl py-6 font-medium">Update movement</h1>
+        </div>
+    </div>
+    <div class="pt-10 pl-0 md:pl-20">
+        <div class="absolute ml-4">
+            <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Terug</a>
+        </div>
+
+        <section class="bg-white pt-16 xl:pt-0">
+            <div class="px-4 mx-auto max-w-2xl">
+                <form asp-action="Edit" enctype="multipart/form-data" asp-route-id="Id">
+                    <div asp-validation-summary="ModelOnly" class="text-red-700"></div>
+                    
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="ImageUrl" />
+                    <div class="mb-4 w-full">
+                        <label asp-for="Name" class="block mb-2 text-lg font-medium text-gray-900">Name</label>
+                        <input type="text" asp-for="Name" name="Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                        <span asp-validation-for="Name" class="text-red-700"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <fieldset>
+                            <legend>Upload Image</legend>
+                            <label for="Image">Image</label>
+                            <input type="file" name="Image" id="imageUpload" onchange="previewImage(event)" />
+                            <br />
+                            <img id="imagePreview" src="@Url.Content("~/Images/" + Model.ImageUrl)" alt="Image Preview" style="max-width: 200px; max-height: 200px;" />
+                            <br />
+                        </fieldset>
+                    </div>
+
+                    <div class="w-full flex justify-end">
+                        <input type="submit" value="Save" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+
+    <script>
+        function previewImage(event) {
+            var input = event.target;
+            var preview = document.getElementById('imagePreview');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</div>

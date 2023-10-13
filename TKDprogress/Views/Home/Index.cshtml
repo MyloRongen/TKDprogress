@@ -6,34 +6,37 @@
     <img class="w-full h-[700px] object-cover brightness-50" src="https://wallpapers.com/images/hd/martial-art-taekwondo-graphic-art-11nul6a2araoj7zd.jpg">
 
     <div class="text-white absolute bottom-20 left-0 px-20">
-        <h1 class="text-5xl font-medium">Taekwondo leren?</h1>
-        <h2 class="text-xl pt-2">Maak een account aan om de tuls en de Taekwondo-terminologie te leren.</h2>
+        <h1 class="text-5xl font-medium">@Localizer["LearnTaekwondo"]</h1>
+        <h2 class="text-xl pt-2">@Localizer["CreateAccountLearn"]</h2>
 
         <div class="pt-10 w-full">
-            <a class="py-4 bg-[#1CADE4] text-center rounded-md text-black text-lg p-28 w-[600px]">Begin nu</a>
+            <a asp-area="Identity" asp-page="/Account/Login" class="py-4 bg-[#1CADE4] font-medium text-center rounded-md text-black text-white text-xl p-28 w-[600px]">@Localizer["StartNow"]</a>
         </div>
     </div>
 </div>
 
 <div class="px-20 flex w-full pt-20 gap-8">
     <div class="w-full h-full relative group">
-        <img class="w-full h-full object-cover rounded-md transition-transform transform scale-100 group-hover:scale-105 dar brightness-[0.25]" src="https://www.southerndragontaekwondo.com/uploads/1/9/3/1/19316177/5927741_orig.jpg" alt="Image 1">
-        <div class="absolute inset-0 flex items-center justify-center text-white text-3xl font-semibold">
-            Tuls
-        </div>
+        <a asp-area="" asp-controller="Home" asp-action="Tul">
+            <img class="w-full h-full object-cover rounded-md transition-transform transform scale-100 group-hover:scale-105 brightness-[0.25]" src="https://www.southerndragontaekwondo.com/uploads/1/9/3/1/19316177/5927741_orig.jpg" alt="Image 1">
+            <div class="absolute inset-0 flex items-center justify-center text-white text-3xl font-semibold">
+                Tuls
+            </div>
+        </a>
     </div>
     <div class="w-full h-full relative group">
-        <img class="w-full h-full object-cover rounded-md transition-transform transform scale-100 group-hover:scale-105 brightness-[0.25]" src="https://i.ytimg.com/vi/ASGvV76g084/sddefault.jpg" alt="Image 2">
-        <div class="absolute inset-0 flex items-center justify-center text-white text-3xl font-semibold">
-            Terminologie
-        </div>
+        <a asp-area="" asp-controller="Home" asp-action="Terminology">
+            <img class="w-full h-full object-cover rounded-md transition-transform transform scale-100 group-hover:scale-105 brightness-[0.25]" src="https://i.ytimg.com/vi/ASGvV76g084/sddefault.jpg" alt="Image 2">
+            <div class="absolute inset-0 flex items-center justify-center text-white text-3xl font-semibold">
+                @Localizer["Terminology"]
+            </div>
+        </a>
     </div>
 </div>
 
 <div class="px-20 pt-20">
-    <h1 class="text-2xl font-bold flex justify-center">Tuls en Terminologie in Taekwondo</h1>
+    <h1 class="text-2xl font-bold flex justify-center">@Localizer["TulsTerminology"]</h1>
     <p class="text-lg pt-2">
-        Tuls en terminologie spelen een cruciale rol in de wereld van Taekwondo. Ze vormen de basis van de traditionele vechtkunst en dragen bij aan de diepgaande betekenis en geschiedenis ervan. Laten we eens kijken naar wat tuls en terminologie precies inhouden. Tuls verwijzen naar de reeks gestandaardiseerde stijloefeningen in Taekwondo. Elke tul bestaat uit een gechoreografeerde reeks bewegingen die vecht- en verdedigingstechnieken vertegenwoordigen. Tuls zijn ontworpen om de beoefenaar te helpen bij het ontwikkelen van spiergeheugen, balans, coördinatie en technische vaardigheden. Ze variëren in complexiteit en worden doorgaans uitgevoerd als solo-oefeningen.
-        Taekwondo heeft een uitgebreide lijst van Koreaanse termen en uitdrukkingen die essentieel zijn voor beoefenaars. Hier zijn enkele veelvoorkomende termen:
+        @Localizer["Description"]
     </p>
 </div>

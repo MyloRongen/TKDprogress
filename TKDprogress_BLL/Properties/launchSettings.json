@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "TKDprogress_BLL": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64035;http://localhost:64037"
+    }
+  }
+}

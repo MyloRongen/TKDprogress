@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Enums;
+using TKDprogress_BLL.Enums;
 
 namespace TKDprogress_DAL.Entities
 {
@@ -14,5 +14,8 @@ namespace TKDprogress_DAL.Entities
         public string Meaning { get; set; }
 
         public EnumStatus Status { get; set; }
+
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

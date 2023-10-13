@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Admin/_Layout.cshtml";
+    Layout = "../Shared/_Layout.cshtml";
 }
 
 <div class="h-screen">
@@ -11,7 +11,17 @@
             <h1 class="text-3xl py-6 font-medium">Create category</h1>
         </div>
     </div>
+    @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+    {
+        <div class="px-2 md:px-20 pt-10">
+            <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full">
+                @TempData["ErrorMessage"]
+            </div>
+        </div>
+    }
+
     <div class="pt-10 pl-0 md:pl-20">
+
         <div class="absolute ml-4">
             <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Terug</a>
         </div>
@@ -20,11 +30,10 @@
             <div class="px-4 mx-auto max-w-2xl">
                 <form asp-action="Create" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="text-danger">
-                        @* Validation summary goes here *@
-                    </div>
                     <div class="mb-4 w-full">
-                        <custom-input label="Name" name="Name"></custom-input>
+                        <label asp-for="Name" class="block mb-2 text-lg font-medium text-gray-900">Name</label>
+                        <input type="text" asp-for="Name" name="Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                        <span asp-validation-for="Name" class="text-red-700"></span>
                     </div>
 
                     <div class="mb-4">

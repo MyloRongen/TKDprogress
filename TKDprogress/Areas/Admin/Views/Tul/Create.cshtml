@@ -1,0 +1,166 @@
+﻿@model CreateTulViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="h-screen overflow-y-auto transform scroll">
+    <div class="shadow-lg">
+        <div class="flex flex-col justify-center pl-4 md:pl-20">
+            <h1 class="text-3xl py-6 font-medium">Create tul</h1>
+        </div>
+    </div>
+    @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-green-500 w-full mb-10">
+            @TempData["StatusMessage"]
+        </div>
+    }
+
+    @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full mb-10">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="pt-10 pl-0 md:pl-20">
+        <div class="absolute ml-4">
+            <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Terug</a>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+        <section class="bg-white pt-16 xl:pt-0">
+            <div class="px-4 mx-auto max-w-2xl">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="text-danger">
+                        @* Validation summary goes here *@
+                    </div>
+                    <div class="mb-4 w-full">
+                        <custom-input label="Name" name="Name"></custom-input>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="block mb-2 text-lg font-medium text-gray-900">Description</label>
+                        <textarea type="text" asp-for="Description" name="Description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></textarea>
+                        <span asp-validation-for="Description" class="text-red-700"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-2 text-lg font-medium text-gray-900">Add Movements</label>
+                        <ul id="movements-list" class="border border-gray-300 rounded-lg p-2">
+                            
+                        </ul>
+                    </div>
+
+                    <li id="movement-template" style="display: none;">
+                        <div class="bg-white border border-gray-300 p-2 mb-2 cursor-pointer flex justify-between">
+                            <span class="movement-name"></span>
+
+                            <div>
+                                <input type="hidden" class="selected-movement-id" name="SelectedMovements" />
+                                <span class="material-symbols-outlined sort">sort</span>
+                                <button class="delete-movement-btn material-symbols-outlined" onclick="deleteMovement(this)">Delete</button>
+                            </div>
+                        </div>
+                    </li>
+
+                    <input type="hidden" name="TulMovements" id="tul-movements" />
+
+                    <div class="w-full flex justify-end">
+                        <input type="submit" value="Create" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+                    </div>
+                </form>
+
+                <div class="mb-4">
+                    <label class="block mb-2 text-lg font-medium text-gray-900">Select a Movement</label>
+                    <select id="movement-dropdown" class="border border-gray-300 rounded-lg p-2">
+                        @foreach (var movement in Model.Movements)
+                        {
+                            <option value="@movement.Id">@movement.Name</option>
+                        }
+                    </select>
+                    <button id="add-movement-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Add Movement</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+
+    <script>
+        const movementDropdown = document.getElementById('movement-dropdown');
+        const addMovementButton = document.getElementById('add-movement-button');
+        const orderList = document.getElementById('movements-list');
+
+        const movementTemplate = document.getElementById('movement-template').cloneNode(true);
+        movementTemplate.style.display = 'block';
+
+        let orderCounter = 1;
+
+        addMovementButton.addEventListener('click', function () {
+            const selectedMovementId = movementDropdown.value;
+            const selectedMovementText = movementDropdown.options[movementDropdown.selectedIndex].text;
+
+            const newMovementItem = movementTemplate.cloneNode(true);
+
+            newMovementItem.querySelector('.movement-name').textContent = selectedMovementText;
+            newMovementItem.querySelector('.selected-movement-id').value = selectedMovementId;
+
+            orderList.appendChild(newMovementItem);
+
+            const tulMovementsInput = document.getElementById('tul-movements');
+            const existingTulMovements = JSON.parse(tulMovementsInput.value || '[]');
+            existingTulMovements.push({ MovementId: selectedMovementId, Order: orderCounter++ });
+            tulMovementsInput.value = JSON.stringify(existingTulMovements);
+        });
+
+        function deleteMovement(buttonElement) {
+            const listItem = buttonElement.closest('li');
+            const selectedMovementId = listItem.querySelector('.selected-movement-id').value;
+
+            listItem.remove();
+
+            const tulMovementsInput = document.getElementById('tul-movements');
+            const existingTulMovements = JSON.parse(tulMovementsInput.value || '[]');
+
+            const indexToRemove = existingTulMovements.findIndex(item => item.MovementId === selectedMovementId);
+            if (indexToRemove !== -1) {
+                existingTulMovements.splice(indexToRemove, 1);
+            }
+
+            existingTulMovements.forEach((item, index) => {
+                item.Order = index + 1;
+            });
+
+            tulMovementsInput.value = JSON.stringify(existingTulMovements);
+        }
+    </script> 
+
+    <script>
+        const movementsList = document.getElementById('movements-list');
+        const sortable = new Sortable(movementsList, {
+            animation: 150,
+            handle: '.cursor-pointer',
+            onUpdate: function (event) {
+                const items = event.from.children;
+                const existingTulMovements = [];
+
+                for (let i = 0; i < items.length; i++) {
+                    const movementId = items[i].querySelector('.selected-movement-id').value;
+                    existingTulMovements.push({ MovementId: movementId, Order: i + 1 });
+                }
+
+                const tulMovementsInput = document.getElementById('tul-movements');
+                tulMovementsInput.value = JSON.stringify(existingTulMovements);
+            },
+        });
+    </script>
+</div>

@@ -9,7 +9,7 @@ namespace TKDprogress_BLL.Enums
     public enum EnumStatus
     {
         unlearned,
-        InProgress,
+        inProgress,
         learned
     }
 }

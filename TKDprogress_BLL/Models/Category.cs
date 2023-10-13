@@ -13,5 +13,7 @@ namespace TKDprogress_BLL.Models
         public string Description { get; set; }
 
         public List<Terminology> Terminologies { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }
