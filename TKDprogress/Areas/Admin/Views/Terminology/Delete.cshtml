@@ -8,9 +8,16 @@
 <div class="px-12 pt-10 h-screen">
     <h1 class="text-3xl font-medium">Delete</h1>
 
-    @if (TempData["ErrorMessage"] != null)
+    @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
     {
-        <div class="text-red-700">
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-green-500 w-full mb-10">
+            @TempData["StatusMessage"]
+        </div>
+    }
+
+    @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+    {
+        <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full mb-10">
             @TempData["ErrorMessage"]
         </div>
     }

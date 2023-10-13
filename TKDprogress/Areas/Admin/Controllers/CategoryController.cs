@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TKDprogress.Models;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
 using TKDprogress_DAL.Repositories;
-using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Areas.Admin.Controllers
 {
@@ -22,7 +23,20 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> IndexAsync(string searchString)
         {
-            List<CategoryDto> categories = await _categoryService.GetCategoriesAsync(searchString);
+            List<Category> categories = await _categoryService.GetCategoriesAsync(searchString);
+
+            if (categories.Any(c => c.ErrorMessage != null))
+            {
+                foreach (Category category in categories)
+                {
+                    if (category.ErrorMessage != null)
+                    {
+                        TempData["ErrorMessage"] = category.ErrorMessage;
+                    }
+                }
+
+                return View(new List<CategoryViewModel>());
+            }
 
             List<CategoryViewModel> categoryViewModels = categories.Select(category => new CategoryViewModel
             {
@@ -36,7 +50,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
+            Category category = await _categoryService.GetCategoryByIdAsync(id);
 
             if (category.ErrorMessage == null)
             {
@@ -68,7 +82,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(categoryViewModel);
             }
 
-            CategoryDto category = new()
+            Category category = new()
             {
                 Name = categoryViewModel.Name,
                 Description = categoryViewModel.Description
@@ -88,7 +102,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
+            Category category = await _categoryService.GetCategoryByIdAsync(id);
 
             UpdateCategoryViewModel categoryViewModel = new()
             {
@@ -109,7 +123,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(categoryViewModel);
             }
 
-            CategoryDto category = new()
+            Category category = new()
             {
                 Id = categoryViewModel.Id,
                 Name = categoryViewModel.Name,
@@ -130,7 +144,7 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Delete(int id)
         {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
+            Category category = await _categoryService.GetCategoryByIdAsync(id);
 
             CategoryViewModel categoryViewModel = new()
             {
@@ -146,11 +160,11 @@ namespace TKDprogress.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
-            CategoryDto category = await _categoryService.GetCategoryByIdAsync(id);
-            await _categoryService.DeleteCategoryAsync(category);
-
             try
             {
+                Category category = await _categoryService.GetCategoryByIdAsync(id);
+                await _categoryService.DeleteCategoryAsync(category);
+
                 TempData["StatusMessage"] = "The category was successfully deleted!";
                 return RedirectToAction(nameof(Index));
             }

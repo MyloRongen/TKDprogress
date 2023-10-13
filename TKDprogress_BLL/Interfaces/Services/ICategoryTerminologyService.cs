@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
+using TKDprogress_BLL.Models;
 
-namespace TKDprogress_BLL.Interfaces
+namespace TKDprogress_BLL.Interfaces.Services
 {
     public interface ICategoryTerminologyService
     {
-        Task<CategoryDto> GetTerminologiesAssignedToCategoryAsync(int categoryId);
+        Task<Category> GetTerminologiesAssignedToCategoryAsync(int categoryId);
     }
 }

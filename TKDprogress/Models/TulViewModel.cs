@@ -1,5 +1,5 @@
-﻿using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
+﻿using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
 
 namespace TKDprogress.Models
 {
@@ -11,6 +11,8 @@ namespace TKDprogress.Models
 
         public EnumStatus? Status { get; set; }
 
-        public List<MovementDto>? Movements { get; set; }
+        public List<Movement>? Movements { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

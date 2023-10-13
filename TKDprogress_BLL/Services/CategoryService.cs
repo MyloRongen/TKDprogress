@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,31 +19,31 @@ namespace TKDprogress_BLL.Services
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<List<CategoryDto>> GetCategoriesAsync(string searchString)
+        public async Task<List<Category>> GetCategoriesAsync(string searchString)
         {
-            List<CategoryDto> categories = await _categoryRepository.GetCategoriesAsync(searchString);
+            List<Category> categories = await _categoryRepository.GetCategoriesAsync(searchString);
 
             return categories;
         }
 
-        public async Task<CategoryDto> GetCategoryByIdAsync(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
             if (id <= 0)
             {
-                return new CategoryDto { ErrorMessage = "Invalid category." };
+                return new Category { ErrorMessage = "Invalid category." };
             }
 
-            CategoryDto category = await _categoryRepository.GetCategoryByIdAsync(id);
+            Category category = await _categoryRepository.GetCategoryByIdAsync(id);
 
             if (category.Id <= 0)
             {
-                return new CategoryDto { ErrorMessage = "Category not found." };
+                return new Category { ErrorMessage = "Category not found." };
             }
 
             return category;
         }
 
-        public async Task<CategoryDto> CreateCategoryAsync(CategoryDto category)
+        public async Task<Category> CreateCategoryAsync(Category category)
         {
             if (string.IsNullOrEmpty(category.Name) || string.IsNullOrEmpty(category.Description))
             {
@@ -55,7 +56,7 @@ namespace TKDprogress_BLL.Services
             return category;
         }
 
-        public async Task<CategoryDto> UpdateCategoryAsync(CategoryDto category)
+        public async Task<Category> UpdateCategoryAsync(Category category)
         {
             if (category.Id <= 0)
             {
@@ -74,7 +75,7 @@ namespace TKDprogress_BLL.Services
             return category;
         }
 
-        public async Task<CategoryDto> DeleteCategoryAsync(CategoryDto category)
+        public async Task<Category> DeleteCategoryAsync(Category category)
         {
             if (category.Id <= 0)
             {

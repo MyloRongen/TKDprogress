@@ -11,11 +11,11 @@
             <h1 class="text-3xl py-6 font-medium">Create category</h1>
         </div>
     </div>
-    @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
+    @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
     {
         <div class="px-2 md:px-20 pt-10">
             <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full">
-                @TempData["StatusMessage"]
+                @TempData["ErrorMessage"]
             </div>
         </div>
     }

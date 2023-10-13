@@ -1,7 +1,7 @@
 using Moq;
 using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Services;
-using TKDprogress_SL.Entities;
 using TKDprogress_UnitTest.DummyRepositories;
 
 namespace TKDprogress_UnitTest
@@ -20,11 +20,11 @@ namespace TKDprogress_UnitTest
 
         private void InitializeMovementItems()
         {
-            List<MovementDto> movements = new()
+            List<Movement> movements = new()
             {
-                new MovementDto { Id = 1, Name = "Ready stance", ImageUrl = "test.jpg"},
-                new MovementDto { Id = 2, Name = "Right low block", ImageUrl = "test.jpg"},
-                new MovementDto { Id = 3, Name = "Left low block", ImageUrl = "test.jpg"},
+                new Movement { Id = 1, Name = "Ready stance", ImageUrl = "test.jpg"},
+                new Movement { Id = 2, Name = "Right low block", ImageUrl = "test.jpg"},
+                new Movement { Id = 3, Name = "Left low block", ImageUrl = "test.jpg"},
             };
 
             _movementTestRepository.InitializeMovements(movements);
@@ -37,7 +37,7 @@ namespace TKDprogress_UnitTest
             InitializeMovementItems();
 
             // Act
-            List<MovementDto> movements = await _movementService.GetMovementsAsync("");
+            List<Movement> movements = await _movementService.GetMovementsAsync("");
 
             // Assert
             Assert.That(movements, Has.Count.EqualTo(3));
@@ -50,7 +50,7 @@ namespace TKDprogress_UnitTest
             InitializeMovementItems();
 
             // Act
-            MovementDto movement = await _movementService.GetMovementByIdAsync(3);
+            Movement movement = await _movementService.GetMovementByIdAsync(3);
 
             // Assert
             Assert.That(movement.Id, Is.EqualTo(3));
@@ -62,7 +62,7 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeMovementItems();
 
-            MovementDto movement = new()
+            Movement movement = new()
             {
                 Id = 4,
                 Name = "Punch forward",
@@ -71,10 +71,10 @@ namespace TKDprogress_UnitTest
 
             // Act
             await _movementService.CreateMovementAsync(movement);
-            MovementDto movementDto = await _movementTestRepository.GetMovementByIdAsync(4);
+            Movement newMovement = await _movementTestRepository.GetMovementByIdAsync(4);
 
             // Assert
-            Assert.That(movementDto.Id, Is.EqualTo(4));
+            Assert.That(newMovement.Id, Is.EqualTo(4));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeMovementItems();
 
-            MovementDto newmovement = new()
+            Movement newmovement = new()
             {
                 Id = 1,
                 Name = "Right low block",
@@ -93,10 +93,10 @@ namespace TKDprogress_UnitTest
             // Act
             await _movementService.UpdateMovementAsync(newmovement);
 
-            MovementDto movementDto = await _movementTestRepository.GetMovementByIdAsync(1);
+            Movement newMovement = await _movementTestRepository.GetMovementByIdAsync(1);
 
             // Assert
-            Assert.That(movementDto, Is.EqualTo(newmovement));
+            Assert.That(newMovement, Is.EqualTo(newmovement));
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace TKDprogress_UnitTest
             // Arrange
             InitializeMovementItems();
 
-            MovementDto movement = new()
+            Movement movement = new()
             {
                 Id = 1,
                 Name = "Ready stance",
@@ -114,10 +114,10 @@ namespace TKDprogress_UnitTest
 
             // Act
             await _movementService.DeleteMovementAsync(movement);
-            MovementDto movementDto = await _movementTestRepository.GetMovementByIdAsync(1);
+            Movement newMovement = await _movementTestRepository.GetMovementByIdAsync(1);
 
             // Assert
-            Assert.That(movementDto.Id, Is.EqualTo(0));
+            Assert.That(newMovement.Id, Is.EqualTo(0));
         }
     }
 }

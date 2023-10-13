@@ -6,11 +6,10 @@ using Newtonsoft.Json;
 using TKDprogress.Models;
 using TKDprogress.Models.CreateModels;
 using TKDprogress.Models.UpdateModels;
-using TKDprogress_BLL.Interfaces;
 using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces;
+using TKDprogress_BLL.Interfaces.Services;
 using TKDprogress_BLL.Services;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
 
 namespace TKDprogress.Areas.Admin.Controllers
 {
@@ -31,7 +30,20 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Index(string searchString)
         {
-            List<TulDto> tuls = await _tulService.GetTulsAsync(searchString);
+            List<Tul> tuls = await _tulService.GetTulsAsync(searchString);
+
+            if (tuls.Any(t => t.ErrorMessage != null))
+            {
+                foreach (Tul tul in tuls)
+                {
+                    if (tul.ErrorMessage != null)
+                    {
+                        TempData["ErrorMessage"] = tul.ErrorMessage;
+                    }
+                }
+
+                return View(new List<TulViewModel>());
+            }
 
             List<TulViewModel> tulViewModels = tuls.Select(tul => new TulViewModel
             {
@@ -45,29 +57,35 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            TulDto tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
+            Tul tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
 
-            TulViewModel tulViewModel = new()
+            if (tul.ErrorMessage == null)
             {
-                Id = tul.Id,
-                Name = tul.Name,
-                Description = tul.Description,
-                Movements = tul.Movements.Select(movement => new MovementDto
+                TulViewModel tulViewModel = new()
                 {
-                    Id = movement.Id,
-                    Name = movement.Name,
-                    ImageUrl = movement.ImageUrl,
-                }).ToList(),
-            };
+                    Id = tul.Id,
+                    Name = tul.Name,
+                    Description = tul.Description,
+                    Movements = tul.Movements.Select(movement => new Movement
+                    {
+                        Id = movement.Id,
+                        Name = movement.Name,
+                        ImageUrl = movement.ImageUrl,
+                    }).ToList(),
+                };
 
-            return View(tulViewModel);
+                return View(tulViewModel);
+            }
+
+            TempData["ErrorMessage"] = tul.ErrorMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Create()
         {
-            List<MovementDto> movements = await _movementService.GetMovementsAsync("");
+            List<Movement> movements = await _movementService.GetMovementsAsync("");
 
-            List<MovementDto> movementViewModels = movements.Select(movement => new MovementDto
+            List<Movement> movementViewModels = movements.Select(movement => new Movement
             {
                 Id = movement.Id,
                 Name = movement.Name,
@@ -91,21 +109,28 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(tulViewModel);
             }
 
-            TulDto newTul = new()
+            Tul newTul = new()
             {
                 Name = tulViewModel.Name,
                 Description = tulViewModel.Description
             };
 
-            TulDto tul = await _tulService.CreateTulAsync(newTul);
+            Tul tul = await _tulService.CreateTulAsync(newTul);
+
+            if (tul.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = tul.ErrorMessage;
+                return View(tulViewModel);
+            }
 
             try
             {
                 StringValues tulMovementsJson = collection["TulMovements"];
-                List<TulMovementDto>? tulMovements = JsonConvert.DeserializeObject<List<TulMovementDto>>(tulMovementsJson);
+                List<TulMovement>? tulMovements = JsonConvert.DeserializeObject<List<TulMovement>>(tulMovementsJson);
 
                 await _tulMovementService.AttachMovementsToTulAsync(tul, tulMovements);
 
+                TempData["StatusMessage"] = "The tul was successfully created!";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -116,15 +141,15 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            TulDto tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
-            List<MovementDto> movements = await _movementService.GetMovementsAsync("");
+            Tul tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
+            List<Movement> movements = await _movementService.GetMovementsAsync("");
 
             UpdateTulViewModel tulViewModel = new()
             {
                 Id = tul.Id,
                 Name = tul.Name,
                 Description = tul.Description,
-                Movements = tul.Movements.Select(movement => new MovementDto
+                Movements = tul.Movements.Select(movement => new Movement
                 {
                     Id = movement.Id,
                     Name = movement.Name,
@@ -145,19 +170,25 @@ namespace TKDprogress.Areas.Admin.Controllers
                 return View(tulViewModel);
             }
 
-            TulDto newTul = new()
+            Tul newTul = new()
             {
                 Id = tulViewModel.Id,
                 Name = tulViewModel.Name,
                 Description = tulViewModel.Description
             };
 
-            _ = await _tulService.UpdateTulAsync(newTul);
+            newTul = await _tulService.UpdateTulAsync(newTul);
+
+            if (newTul.ErrorMessage != null)
+            {
+                TempData["ErrorMessage"] = newTul.ErrorMessage;
+                return View(tulViewModel);
+            }
 
             try
             {
                 StringValues tulMovementsJson = collection["TulMovements"];
-                List<TulMovementDto>? tulMovements = JsonConvert.DeserializeObject<List<TulMovementDto>>(tulMovementsJson);
+                List<TulMovement>? tulMovements = JsonConvert.DeserializeObject<List<TulMovement>>(tulMovementsJson);
 
                 if (tulMovements != null)
                 {
@@ -165,6 +196,7 @@ namespace TKDprogress.Areas.Admin.Controllers
                     await _tulMovementService.AttachMovementsToTulAsync(newTul, tulMovements);
                 }
 
+                TempData["StatusMessage"] = "The category was successfully updated!";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -175,14 +207,14 @@ namespace TKDprogress.Areas.Admin.Controllers
 
         public async Task<ActionResult> Delete(int id)
         {
-            TulDto tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
+            Tul tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
 
             TulViewModel tulViewModel = new()
             {
                 Id = tul.Id,
                 Name = tul.Name,
                 Description = tul.Description,
-                Movements = tul.Movements.Select(movement => new MovementDto
+                Movements = tul.Movements.Select(movement => new Movement
                 {
                     Id = movement.Id,
                     Name = movement.Name,
@@ -199,7 +231,7 @@ namespace TKDprogress.Areas.Admin.Controllers
         {
             try
             {
-                TulDto tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
+                Tul tul = await _tulMovementService.GetTulWithMovementByIdAsync(id);
 
                 if (tul != null)
                 {
@@ -210,11 +242,13 @@ namespace TKDprogress.Areas.Admin.Controllers
                 }
                 else
                 {
+                    TempData["StatusMessage"] = "The category was successfully deleted!";
                     return View();
                 }
             }
             catch
             {
+                TempData["ErrorMessage"] = "An error occurred while processing your request.";
                 return View();
             }
         }

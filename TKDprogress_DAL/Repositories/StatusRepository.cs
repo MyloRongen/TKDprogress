@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_DAL.Entities;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Enums;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -15,9 +14,9 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<UserTulDto>> GetAllTulStatuses(string userId)
+        public async Task<List<UserTul>> GetAllTulStatuses(string userId)
         {
-            List<UserTulDto> userTulStatuses = new();
+            List<UserTul> userTulStatuses = new();
 
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
@@ -31,7 +30,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    UserTulDto userTulStatus = new()
+                    UserTul userTulStatus = new()
                     {
                         UserId = reader.GetString("UserId"),
                         TulId = reader.GetInt32("TulId"),
@@ -45,9 +44,9 @@ namespace TKDprogress_DAL.Repositories
             return userTulStatuses;
         }
 
-        public async Task<List<UserCategoryDto>> GetAllCategoryStatuses(string userId)
+        public async Task<List<UserCategory>> GetAllCategoryStatuses(string userId)
         {
-            List<UserCategoryDto> userTulStatuses = new();
+            List<UserCategory> userTulStatuses = new();
 
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
@@ -61,7 +60,7 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    UserCategoryDto userCategoryStatus = new()
+                    UserCategory userCategoryStatus = new()
                     {
                         UserId = reader.GetString("UserId"),
                         CategoryId = reader.GetInt32("CategoryId"),

@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Models;
 
 namespace TKDprogress_UnitTest.DummyRepositories
 {
     public class MovementTestRepository : IMovementRepository
     {
-        private List<MovementDto> movements;
+        private List<Movement> movements;
 
-        public void InitializeMovements(List<MovementDto> newMovement)
+        public void InitializeMovements(List<Movement> newMovement)
         {
             movements = newMovement;
         }
 
-        public async Task<List<MovementDto>> GetMovementsAsync(string searchString)
+        public async Task<List<Movement>> GetMovementsAsync(string searchString)
         {
             return movements;
         }
 
-        public async Task<MovementDto> GetMovementByIdAsync(int id)
+        public async Task<Movement> GetMovementByIdAsync(int id)
         {
-            MovementDto movement = new();
+            Movement movement = new();
 
             foreach (var item in movements)
             {
@@ -38,7 +38,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return movement;
         }
 
-        public async Task<MovementDto> CreateMovementAsync(MovementDto movement)
+        public async Task<Movement> CreateMovementAsync(Movement movement)
         {
             foreach (var item in movements)
             {
@@ -52,7 +52,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return movement;
         }
 
-        public async Task<MovementDto> DeleteMovementAsync(MovementDto movement)
+        public async Task<Movement> DeleteMovementAsync(Movement movement)
         {
             foreach (var item in movements)
             {
@@ -66,7 +66,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return movement;
         }
 
-        public async Task<MovementDto> UpdateMovementAsync(MovementDto newMovement)
+        public async Task<Movement> UpdateMovementAsync(Movement newMovement)
         {
             for (int i = 0; i < movements.Count; i++)
             {

@@ -16,6 +16,20 @@
             <a asp-action="Index" class="text-indigo-600 hover:text-indigo-900">Terug</a>
         </div>
 
+        @if (TempData.ContainsKey("StatusMessage") && TempData["StatusMessage"] != null)
+        {
+            <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-green-500 w-full mb-10">
+                @TempData["StatusMessage"]
+            </div>
+        }
+
+        @if (TempData.ContainsKey("ErrorMessage") && TempData["ErrorMessage"] != null)
+        {
+            <div class="text-white text-xl text-center py-4 rounded-lg shadow-md bg-red-500 w-full mb-10">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
         <section class="bg-white pt-16 xl:pt-0">
             <div class="px-4 mx-auto max-w-2xl">
                 <form asp-action="Create" enctype="multipart/form-data">

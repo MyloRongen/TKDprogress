@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TKDprogress_BLL.Models;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,36 +19,70 @@ namespace TKDprogress_BLL.Services
             _movementRepository = movementRepository;
         }
 
-        public async Task<List<MovementDto>> GetMovementsAsync(string searchString)
+        public async Task<List<Movement>> GetMovementsAsync(string searchString)
         {
-            List<MovementDto> movements = await _movementRepository.GetMovementsAsync(searchString);
+            List<Movement> movements = await _movementRepository.GetMovementsAsync(searchString);
 
             return movements;
         }
 
-        public async Task<MovementDto> GetMovementByIdAsync(int id)
+        public async Task<Movement> GetMovementByIdAsync(int id)
         {
-            MovementDto movement = await _movementRepository.GetMovementByIdAsync(id);
+            if (id <= 0)
+            {
+                return new Movement { ErrorMessage = "Invalid movement." };
+            }
+
+            Movement movement = await _movementRepository.GetMovementByIdAsync(id);
+
+            if (movement.Id <= 0)
+            {
+                return new Movement { ErrorMessage = "Movement not found." };
+            }
 
             return movement;
         }
 
-        public async Task<MovementDto> CreateMovementAsync(MovementDto movement)
+        public async Task<Movement> CreateMovementAsync(Movement movement)
         {
+            if (string.IsNullOrEmpty(movement.Name) || string.IsNullOrEmpty(movement.ImageUrl))
+            {
+                movement.ErrorMessage = "Movement name or image is incorrect.";
+                return movement;
+            }
+
             await _movementRepository.CreateMovementAsync(movement);
 
             return movement;
         }
 
-        public async Task<MovementDto> UpdateMovementAsync(MovementDto movement)
+        public async Task<Movement> UpdateMovementAsync(Movement movement)
         {
+            if (movement.Id <= 0)
+            {
+                movement.ErrorMessage = "Movement type does not exist.";
+                return movement;
+            }
+
+            if (string.IsNullOrEmpty(movement.Name) || string.IsNullOrEmpty(movement.ImageUrl))
+            {
+                movement.ErrorMessage = "Movement name or image is incorrect.";
+                return movement;
+            }
+
             await _movementRepository.UpdateMovementAsync(movement);
 
             return movement;
         }
 
-        public async Task<MovementDto> DeleteMovementAsync(MovementDto movement)
+        public async Task<Movement> DeleteMovementAsync(Movement movement)
         {
+            if (movement.Id <= 0)
+            {
+                movement.ErrorMessage = "Movement type does not exist.";
+                return movement;
+            }
+
             await _movementRepository.DeleteMovementAsync(movement);
 
             return movement;

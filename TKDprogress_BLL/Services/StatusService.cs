@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,12 +18,12 @@ namespace TKDprogress_BLL.Services
             _statusRepository = statusRepository;
         }
 
-        public async Task<List<UserTulDto>> GetAllTulStatuses(string userId)
+        public async Task<List<UserTul>> GetAllTulStatuses(string userId)
         {
             return await _statusRepository.GetAllTulStatuses(userId);
         }
 
-        public async Task<List<UserCategoryDto>> GetAllCategoryStatuses(string userId)
+        public async Task<List<UserCategory>> GetAllCategoryStatuses(string userId)
         {
             return await _statusRepository.GetAllCategoryStatuses(userId);
         }

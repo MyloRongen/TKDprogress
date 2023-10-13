@@ -1,7 +1,4 @@
-﻿using TKDprogress_SL.Entities;
-using TKDprogress_SL.Enums;
-
-namespace TKDprogress.Models
+﻿namespace TKDprogress.Models
 {
     public class TerminologyViewModel
     {
@@ -12,5 +9,7 @@ namespace TKDprogress.Models
         public int CategoryId { get; set; }
         public CategoryViewModel Category { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
+
+        public string? ErrorMessage { get; set; }
     }
 }

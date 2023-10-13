@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TKDprogress_BLL.Interfaces;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Interfaces.Services;
 
 namespace TKDprogress_BLL.Services
 {
@@ -18,20 +19,20 @@ namespace TKDprogress_BLL.Services
             _userCategoryRepository = userCategoryRepository;
         }
 
-        public async Task<List<UserCategoryDto>> GetCategoriesAssignedToUserAsync(string? userId, string searchString)
+        public async Task<List<UserCategory>> GetCategoriesAssignedToUserAsync(string? userId, string searchString)
         {
-            List<UserCategoryDto> assignedCategories = await _userCategoryRepository
+            List<UserCategory> assignedCategories = await _userCategoryRepository
                 .GetCategoriesAssignedToUserAsync(userId, searchString);
 
             return assignedCategories;
         }
 
-        public async Task<UserCategoryDto> GetUserCategory(int categoryId, string userId)
+        public async Task<UserCategory> GetUserCategory(int categoryId, string userId)
         {
             return await _userCategoryRepository.GetUserCategory(categoryId, userId);
         }
 
-        public async Task<UserCategoryDto> UpdateUserCategoryStatus(UserCategoryDto userCategory)
+        public async Task<UserCategory> UpdateUserCategoryStatus(UserCategory userCategory)
         {
             return await _userCategoryRepository.UpdateUserCategoryStatus(userCategory);
         }

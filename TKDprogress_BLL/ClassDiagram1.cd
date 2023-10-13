@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TKDprogress_BLL.Models.Category">
+    <Position X="8" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAAQAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Models\Category.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TKDprogress_BLL.Models.Terminology">
+    <Position X="7.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAABAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Models\Terminology.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.CategoryService" BaseTypeListCollapsed="true">
+    <Position X="11" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAABAAAAAAAAAAAAAAABAAAAACAAEABAAAAAA=</HashCode>
+      <FileName>Services\CategoryService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.CategoryTerminologyService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Services\CategoryTerminologyService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.MovementService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAgAIAAAIAAAgAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\MovementService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.PercentageCalculationService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\PercentageCalculationService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.StatusService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Services\StatusService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.TerminologyService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAABAAAAAAAAgAIAACAAAAAAAA=</HashCode>
+      <FileName>Services\TerminologyService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.TulMovementService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAECAAAAAAAAAAAAAAAAAAAAAAAAABAgAAAAAAAAA=</HashCode>
+      <FileName>Services\TulMovementService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.TulService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQQAEAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Services\TulService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.UserCategoryService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAACAACAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\UserCategoryService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TKDprogress_BLL.Services.UserTulService" BaseTypeListCollapsed="true">
+    <Position X="11" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Services\UserTulService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="TKDprogress_BLL.Interfaces.ICategoryService">
+    <Position X="9.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAEABAAAAAA=</HashCode>
+      <FileName>Interfaces\ICategoryService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.ICategoryTerminologyService" Collapsed="true">
+    <Position X="2.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Interfaces\ICategoryTerminologyService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.IMovementService" Collapsed="true">
+    <Position X="4" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAgAAAAAIAAAgAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IMovementService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.IPercentageCalculationService" Collapsed="true">
+    <Position X="5.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IPercentageCalculationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.IStatusService" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IStatusService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.ITerminologyService" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAgAIAACAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITerminologyService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.ITulMovementService" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAABAgAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITulMovementService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.ITulService" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAEAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Interfaces\ITulService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.IUserCategoryService" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAACAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IUserCategoryService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TKDprogress_BLL.Interfaces.IUserTulService">
+    <Position X="9.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Interfaces\IUserTulService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="TKDprogress_BLL.Enums.EnumStatus" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\EnumStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

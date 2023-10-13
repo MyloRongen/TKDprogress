@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Interfaces.Repositories;
+using TKDprogress_BLL.Models;
 
 namespace TKDprogress_UnitTest.DummyRepositories
 {
     public class TulTestRepository : ITulRepository
     {
-        private List<TulDto> tuls;
+        private List<Tul> tuls;
 
-        public void InitializeTuls(List<TulDto> newTuls)
+        public void InitializeTuls(List<Tul> newTuls)
         {
             tuls = newTuls;
         }
 
-        public async Task<List<TulDto>> GetTulsAsync(string searchString)
+        public async Task<List<Tul>> GetTulsAsync(string searchString)
         {
             return tuls;
         }
 
-        public async Task<TulDto> CreateTulAsync(TulDto newTul)
+        public async Task<Tul> CreateTulAsync(Tul newTul)
         {
             foreach (var item in tuls)
             {
@@ -36,7 +36,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return newTul;
         }
 
-        public async Task<TulDto> DeleteTulAsync(TulDto tul)
+        public async Task<Tul> DeleteTulAsync(Tul tul)
         {
             foreach (var item in tuls)
             {
@@ -50,7 +50,7 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return tul;
         }
 
-        public async Task<TulDto> UpdateTulAsync(TulDto newTul)
+        public async Task<Tul> UpdateTulAsync(Tul newTul)
         {
             for (int i = 0; i < tuls.Count; i++)
             {
@@ -64,9 +64,9 @@ namespace TKDprogress_UnitTest.DummyRepositories
             return newTul;
         }
 
-        public TulDto GetTulById(int id)
+        public Tul GetTulById(int id)
         {
-            TulDto tul = new();
+            Tul tul = new();
 
             foreach (var item in tuls)
             {

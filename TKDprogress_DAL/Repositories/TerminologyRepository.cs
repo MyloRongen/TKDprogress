@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TKDprogress_SL.Entities;
-using TKDprogress_SL.Interfaces;
+using TKDprogress_BLL.Models;
+using TKDprogress_BLL.Interfaces.Repositories;
 
 namespace TKDprogress_DAL.Repositories
 {
@@ -13,12 +13,13 @@ namespace TKDprogress_DAL.Repositories
     {
         private readonly string _connectionString = "Server=localhost;Database=tkd;Uid=root;Pwd=;";
 
-        public async Task<List<TerminologyDto>> GetTerminologiesAsync(string searchString)
+        public async Task<List<Terminology>> GetTerminologiesAsync(string searchString)
         {
-            List<TerminologyDto> terminologies = new();
+            List<Terminology> terminologies = new();
 
-            using (MySqlConnection connection = new(_connectionString))
+            try
             {
+                using MySqlConnection connection = new(_connectionString);
                 await connection.OpenAsync();
 
                 string query = "SELECT t.*, ca.* FROM Terminologies t INNER JOIN Categories ca ON t.CategoryId = ca.Id";
@@ -32,13 +33,13 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    TerminologyDto terminology = new()
+                    Terminology terminology = new()
                     {
                         Id = reader.GetInt32("Id"),
                         Word = reader.GetString("Word"),
                         Meaning = reader.GetString("Meaning"),
                         CategoryId = reader.GetInt32("CategoryId"),
-                        Category = new CategoryDto
+                        Category = new Category
                         {
                             Id = reader.GetInt32("CategoryId"),
                             Name = reader.GetString("Name"),
@@ -49,16 +50,25 @@ namespace TKDprogress_DAL.Repositories
                     terminologies.Add(terminology);
                 }
             }
+            catch
+            {
+                terminologies = new()
+                {
+                    new Terminology { ErrorMessage = "De terminologies could not be loaded." }
+                };
+            }
 
             return terminologies;
         }
 
-        public async Task<TerminologyDto> GetTerminologyByIdAsync(int id)
+        public async Task<Terminology> GetTerminologyByIdAsync(int id)
         {
-            TerminologyDto? terminology = new();
+            Terminology? terminology = new();
 
-            using (MySqlConnection connection = new(_connectionString))
+            try
             {
+
+                using MySqlConnection connection = new(_connectionString);
                 await connection.OpenAsync();
 
                 string query = "SELECT t.*, ca.* FROM Terminologies t INNER JOIN Categories ca ON t.CategoryId = ca.Id WHERE t.Id = @Id";
@@ -69,13 +79,13 @@ namespace TKDprogress_DAL.Repositories
                 using MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    terminology = new TerminologyDto
+                    terminology = new Terminology
                     {
                         Id = reader.GetInt32("Id"),
                         Word = reader.GetString("Word"),
                         Meaning = reader.GetString("Meaning"),
                         CategoryId = reader.GetInt32("CategoryId"),
-                        Category = new CategoryDto
+                        Category = new Category
                         {
                             Id = reader.GetInt32("CategoryId"),
                             Name = reader.GetString("Name"),
@@ -84,42 +94,67 @@ namespace TKDprogress_DAL.Repositories
                     };
                 }
             }
-
-            return terminology;
-        }
-
-
-        public async Task<TerminologyDto> CreateTerminologyAsync(TerminologyDto terminology)
-        {
-            string query = "INSERT INTO Terminologies (Word, Meaning, CategoryId) VALUES (@Word, @Meaning, @CategoryId)";
-            await ExecuteNonQueryAsync(query, command =>
+            catch
             {
-                command.Parameters.AddWithValue("@Word", terminology.Word);
-                command.Parameters.AddWithValue("@Meaning", terminology.Meaning);
-                command.Parameters.AddWithValue("@CategoryId", terminology.CategoryId);
-            });
+                terminology.ErrorMessage = "An error occurred while trying to get the terminology.";
+            }
 
             return terminology;
         }
 
-        public async Task<TerminologyDto> DeleteTerminologyAsync(TerminologyDto terminology)
-        {
-            string query = "DELETE FROM Terminologies WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", terminology.Id));
 
-            return terminology;
-        }
-
-        public async Task<TerminologyDto> UpdateTerminologyAsync(TerminologyDto newTerminology)
+        public async Task<Terminology> CreateTerminologyAsync(Terminology terminology)
         {
-            string query = "UPDATE Terminologies SET Word = @Word, Meaning = @Meaning, CategoryId = @CategoryId WHERE Id = @Id";
-            await ExecuteNonQueryAsync(query, command =>
+            try
             {
-                command.Parameters.AddWithValue("@Id", newTerminology.Id);
-                command.Parameters.AddWithValue("@Word", newTerminology.Word);
-                command.Parameters.AddWithValue("@Meaning", newTerminology.Meaning);
-                command.Parameters.AddWithValue("@CategoryId", newTerminology.CategoryId);
-            });
+                string query = "INSERT INTO Terminologies (Word, Meaning, CategoryId) VALUES (@Word, @Meaning, @CategoryId)";
+                await ExecuteNonQueryAsync(query, command =>
+                {
+                    command.Parameters.AddWithValue("@Word", terminology.Word);
+                    command.Parameters.AddWithValue("@Meaning", terminology.Meaning);
+                    command.Parameters.AddWithValue("@CategoryId", terminology.CategoryId);
+                });
+            }
+            catch
+            {
+                terminology.ErrorMessage = "An error occurred while creating the terminology.";
+            }
+
+            return terminology;
+        }
+
+        public async Task<Terminology> DeleteTerminologyAsync(Terminology terminology)
+        {
+            try
+            {
+                string query = "DELETE FROM Terminologies WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command => command.Parameters.AddWithValue("@Id", terminology.Id));
+            }
+            catch
+            {
+                terminology.ErrorMessage = "An error occurred while deleting the terminology.";
+            }
+
+            return terminology;
+        }
+
+        public async Task<Terminology> UpdateTerminologyAsync(Terminology newTerminology)
+        {
+            try
+            {
+                string query = "UPDATE Terminologies SET Word = @Word, Meaning = @Meaning, CategoryId = @CategoryId WHERE Id = @Id";
+                await ExecuteNonQueryAsync(query, command =>
+                {
+                    command.Parameters.AddWithValue("@Id", newTerminology.Id);
+                    command.Parameters.AddWithValue("@Word", newTerminology.Word);
+                    command.Parameters.AddWithValue("@Meaning", newTerminology.Meaning);
+                    command.Parameters.AddWithValue("@CategoryId", newTerminology.CategoryId);
+                });
+            }
+            catch
+            {
+                newTerminology.ErrorMessage = "An error occurred while updating the terminology.";
+            }
 
             return newTerminology;
         }
